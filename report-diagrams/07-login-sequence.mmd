@@ -4,22 +4,23 @@ sequenceDiagram
     participant Web as Web Application
     participant API as Backend API
     participant Auth as Identity and Access Service
-    participant LDAP as CU Net LDAP
+    participant OAuth as OAuth Provider
     participant DB as Application Database
 
-    User->>Web: Enter CU Net username and password
-    Web->>API: Submit login request
-    API->>Auth: Validate credentials
-    Auth->>LDAP: Bind with CU Net credentials
-    LDAP-->>Auth: Authentication result
+    User->>Web: Click Login
+    Web->>OAuth: Redirect to OAuth login page
+    OAuth-->>User: Show login form
+    User->>OAuth: Enter credentials
     alt Valid credentials
+        OAuth-->>Web: Return authorization code
+        Web->>API: Exchange code for token
+        API->>Auth: Validate and resolve user identity
         Auth->>DB: Load user, unit, role, and delegation
         DB-->>Auth: Access profile
-        Auth-->>API: Issue access token
+        Auth-->>API: Issue access token with roles
         API-->>Web: Return token and profile
         Web-->>User: Show authorized workspace
     else Invalid credentials or inactive account
-        Auth-->>API: Reject login
-        API-->>Web: Return access denied
+        OAuth-->>Web: Return access denied
         Web-->>User: Show error message
     end

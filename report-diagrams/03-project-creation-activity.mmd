@@ -5,26 +5,31 @@ flowchart TD
     classDef data fill:#ecfdf5,stroke:#047857,color:#0f172a;
 
     Start((Start))
-    Login["Unit Representative logs in"]:::action
-    Choose{"Choose creation mode"}:::decision
-    Manual["Enter project details, budget, PR number, urgency, due date if urgent"]:::action
-    FromPlan["Select one or more planned budget items"]:::action
-    Excel["Upload Excel file"]:::action
-    Validate["Validate required data and attachments"]:::action
+    WhoCreates{"Who is creating?"}:::decision
+
+    AdminImport["Admin imports budget plan"]:::action
+    BudgetSaved["Budget plan saved to system"]:::data
+
+    UnitRepCreate["Unit Representative enters project details\nbudget, PR number, urgency, due date"]:::action
+    DocStaffChoose{"Document Staff chooses mode"}:::decision
+    DocCreate["Document Staff enters project details\nbudget, PR number, urgency, due date"]:::action
+    DocBulk["Document Staff uploads Excel file\nfrom Fiori or Lesspaper"]:::action
+
+    Validate["Validate required data"]:::action
     Valid{"Data valid?"}:::decision
     Error["Show validation errors for correction"]:::action
-    Receive["Generate receive number and keep legacy reference number"]:::action
+    Receive["Generate receive number"]:::action
     Save["Save project record"]:::data
-    LinkPlan["Link selected budget plan items to project"]:::data
     Pool["Place project in assignment pool as Unassigned"]:::action
     Show["Show receive number to user"]:::action
     End((End))
 
-    Start --> Login --> Choose
-    Choose -- "Manual" --> Manual --> Validate
-    Choose -- "From budget plan" --> FromPlan --> Validate
-    Choose -- "Bulk Excel import" --> Excel --> Validate
+    Start --> WhoCreates
+    WhoCreates -- "Admin" --> AdminImport --> BudgetSaved --> End
+    WhoCreates -- "Unit Representative" --> UnitRepCreate --> Validate
+    WhoCreates -- "Document Staff" --> DocStaffChoose
+    DocStaffChoose -- "Single project" --> DocCreate --> Validate
+    DocStaffChoose -- "Bulk import" --> DocBulk --> Validate
     Validate --> Valid
-    Valid -- "No" --> Error --> Choose
-    Valid -- "Yes" --> Receive --> Save
-    Save --> LinkPlan --> Pool --> Show --> End
+    Valid -- "No" --> Error --> WhoCreates
+    Valid -- "Yes" --> Receive --> Save --> Pool --> Show --> End

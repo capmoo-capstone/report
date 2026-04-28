@@ -4,37 +4,89 @@ flowchart TD
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#0f172a;
     classDef state fill:#ecfdf5,stroke:#047857,color:#0f172a;
     classDef stop fill:#fee2e2,stroke:#dc2626,color:#0f172a;
+    classDef finance fill:#fdf4ff,stroke:#9333ea,color:#0f172a;
 
     Start((Start))
-    SelectMethod["Select procurement method"]:::action
-    BuildSteps["System loads matching workflow steps"]:::action
-    Work["Staff completes current step"]:::action
-    Upload["Upload supporting documents"]:::action
-    Version["Store document version and audit log"]:::action
-    Review{"Head review needed?"}:::decision
-    Return{"Return for correction?"}:::decision
-    Reason["Record return reason"]:::action
-    Next{"More procurement steps?"}:::decision
-    AssetPrompt["Ask whether asset code is required"]:::action
-    AssetRecord["Record asset code result"]:::action
-    Contract["Generate contract number when contract starts"]:::action
-    ContractPhase["Manage contract phase"]:::state
-    CancelNeed{"Cancellation requested?"}:::decision
+    ProcPhase["=== PROCUREMENT PHASE ===\nGeneral Staff assigned to project"]:::state
+    Work["General Staff completes current step\nfill required fields and upload documents"]:::action
+    ApproveReq{"Step requires\napproval?"}:::decision
+    HeadApprove["Head of Unit reviews and approves step"]:::action
+    Rejected{"Head rejects?"}:::decision
+    SigReq{"Step requires\nsignature?"}:::decision
+    DocPropose["Document Staff marks step as Proposed"]:::action
+    HeadSign["Head of Department signs outside the app"]:::action
+    DocSign["Document Staff marks step as Signed"]:::action
+    StepDone["Step completed"]:::action
+    MoreSteps{"More procurement\nsteps remaining?"}:::decision
+
+    ProcDone["All procurement steps completed"]:::state
+    NextPhaseChoice{"General Staff chooses\nnext action"}:::decision
+    ReturnPool["Return project to assignment pool\nfor contract unit"]:::action
+    AssignContract["Assign project to General Staff\nin Contract Unit"]:::action
+    WaitAccept["Project status: WAITING_ACCEPT"]:::state
+
+    ContPhase["=== CONTRACT PHASE ===\nContract General Staff works on steps"]:::state
+    ContWork["General Staff completes current contract step"]:::action
+    ContApproveReq{"Step requires\napproval?"}:::decision
+    ContHeadApprove["Head of Unit reviews and approves step"]:::action
+    ContRejected{"Head rejects?"}:::decision
+    ContSigReq{"Step requires\nsignature?"}:::decision
+    ContDocPropose["Document Staff marks step as Proposed"]:::action
+    ContHeadSign["Head of Department signs outside the app"]:::action
+    ContDocSign["Document Staff marks step as Signed"]:::action
+    ContStepDone["Step completed"]:::action
+    ContMoreSteps{"More contract\nsteps remaining?"}:::decision
+
+    ContDone["All contract steps completed"]:::state
+    FinanceExport["Finance Staff exports project"]:::finance
+    FinanceClose["Finance Staff closes project after\nfinancial process completes outside the app"]:::finance
+    Closed["Project status: CLOSED"]:::state
+
+    RequestEdit{"Finance Staff marks\nproject as REQUEST_EDIT?"}:::decision
+    EditDetails["Edit project financial details"]:::action
+    CloseAgain["Finance Staff closes project again"]:::finance
+
+    CancelCheck{"Cancellation\nrequested?"}:::decision
     CancelReview["Head reviews cancellation reason"]:::action
     CancelApproved{"Approved?"}:::decision
-    Cancelled["Project status becomes Cancelled"]:::stop
-    Completed["Project status becomes Completed"]:::state
+    Cancelled["Project status: CANCELLED"]:::stop
+
     End((End))
 
-    Start --> SelectMethod --> BuildSteps --> Work --> Upload --> Version --> Review
-    Review -- "Yes" --> Return
-    Review -- "No" --> Next
-    Return -- "Yes" --> Reason --> Work
-    Return -- "No" --> Next
-    Next -- "Yes" --> Work
-    Next -- "No" --> AssetPrompt --> AssetRecord --> Contract --> ContractPhase
-    ContractPhase --> CancelNeed
-    CancelNeed -- "Yes" --> CancelReview --> CancelApproved
+    Start --> ProcPhase --> Work --> ApproveReq
+    ApproveReq -- "Yes" --> HeadApprove --> Rejected
+    ApproveReq -- "No" --> SigReq
+    Rejected -- "Yes" --> Work
+    Rejected -- "No" --> SigReq
+    SigReq -- "Yes" --> DocPropose --> HeadSign --> DocSign --> StepDone
+    SigReq -- "No" --> StepDone
+    StepDone --> MoreSteps
+    MoreSteps -- "Yes" --> Work
+    MoreSteps -- "No" --> ProcDone
+
+    ProcDone --> NextPhaseChoice
+    NextPhaseChoice -- "Return to pool" --> ReturnPool --> ContPhase
+    NextPhaseChoice -- "Assign to contract staff" --> AssignContract --> WaitAccept --> ContPhase
+
+    ContPhase --> ContWork --> ContApproveReq
+    ContApproveReq -- "Yes" --> ContHeadApprove --> ContRejected
+    ContApproveReq -- "No" --> ContSigReq
+    ContRejected -- "Yes" --> ContWork
+    ContRejected -- "No" --> ContSigReq
+    ContSigReq -- "Yes" --> ContDocPropose --> ContHeadSign --> ContDocSign --> ContStepDone
+    ContSigReq -- "No" --> ContStepDone
+    ContStepDone --> ContMoreSteps
+    ContMoreSteps -- "Yes" --> ContWork
+    ContMoreSteps -- "No" --> ContDone
+
+    ContDone --> FinanceExport --> FinanceClose --> Closed
+    Closed --> RequestEdit
+    RequestEdit -- "Yes" --> EditDetails --> CloseAgain --> Closed
+    RequestEdit -- "No" --> End
+
+    ProcPhase --> CancelCheck
+    ContPhase --> CancelCheck
+    CancelCheck -- "Yes" --> CancelReview --> CancelApproved
+    CancelCheck -- "No" --> Work
     CancelApproved -- "Yes" --> Cancelled --> End
-    CancelApproved -- "No" --> ContractPhase
-    CancelNeed -- "No" --> Completed --> End
+    CancelApproved -- "No" --> ProcPhase

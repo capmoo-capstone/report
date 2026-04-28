@@ -6,7 +6,7 @@ flowchart TD
 
     Start((Start))
     Created["Project enters assignment pool"]:::state
-    Workload["Head or staff reviews workload distribution"]:::action
+    Workload["Head of Unit or Head of Department\nreviews workload distribution"]:::action
     Method{"Assignment method"}:::decision
 
     SelfPick["Staff selects job from pool"]:::action
@@ -19,12 +19,11 @@ flowchart TD
     Confirm["Confirm assignment"]:::action
     Decline["Keep job in pool or select another staff"]:::action
 
-    ChangeNeed{"Need to change assignee before acceptance?"}:::decision
+    ChangeNeed{"Need to change assignee\nbefore acceptance?"}:::decision
     ChangeOwner["Head replaces responsible staff"]:::action
 
-    AddNeed{"Need second assignee during work?"}:::decision
-    AddOwner["Head or current responsible staff adds second assignee"]:::action
-    Limit["Enforce maximum two assignees per work period"]:::action
+    AddNeed{"Need to add another assignee\nduring work?"}:::decision
+    AddOwner["Head or current responsible staff\nadds additional assignee"]:::action
 
     End((End))
 
@@ -36,5 +35,5 @@ flowchart TD
     Accept -- "Yes" --> Confirm --> InProgress
     Accept -- "No" --> Decline --> Workload
     InProgress --> AddNeed
-    AddNeed -- "Yes" --> AddOwner --> Limit --> End
+    AddNeed -- "Yes" --> AddOwner --> End
     AddNeed -- "No" --> End

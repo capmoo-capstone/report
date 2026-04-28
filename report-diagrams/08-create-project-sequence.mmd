@@ -1,6 +1,6 @@
 sequenceDiagram
     autonumber
-    actor Rep as Unit Representative
+    actor Creator as Document Staff or Unit Representative
     participant Web as Web Application
     participant API as Backend API
     participant Project as Project Service
@@ -8,10 +8,10 @@ sequenceDiagram
     participant Number as Receive Number Service
     participant DB as Application Database
 
-    Rep->>Web: Submit project details
+    Creator->>Web: Submit project details
     Web->>API: Create project request
     API->>Project: Validate project data
-    alt Created from budget plan
+    alt Created with budget plan reference
         Project->>Plan: Verify selected planned items
         Plan->>DB: Read planned budget items
         DB-->>Plan: Planned items
@@ -21,10 +21,10 @@ sequenceDiagram
     Number->>DB: Read and increment receive sequence
     DB-->>Number: New receive number
     Number-->>Project: Receive number
-    Project->>DB: Save project, attachments metadata, and plan links
+    Project->>DB: Save project and plan links
     DB-->>Project: Project saved
     Project->>DB: Create unassigned pool entry
     DB-->>Project: Pool entry saved
     Project-->>API: Created project with receive number
     API-->>Web: Return created project
-    Web-->>Rep: Display receive number
+    Web-->>Creator: Display receive number

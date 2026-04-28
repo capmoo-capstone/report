@@ -6,8 +6,9 @@ flowchart LR
 
     Admin["Admin"]:::actor
     UnitRep["Unit Representative"]:::actor
-    Staff["Procurement Staff"]:::actor
-    Head["Head"]:::actor
+    Staff["Procurement Staff / General Staff"]:::actor
+    DocStaff["Document Staff"]:::actor
+    Head["Head of Unit / Department"]:::actor
     Director["Director"]:::actor
     Vendor["Vendor"]:::actor
 
@@ -16,50 +17,51 @@ flowchart LR
 
         subgraph AdminCases["Admin Use Cases"]
             direction TB
-            A1(["Login with CU Net"]):::usecase
-            A2(["Manage users, roles, and units"]):::usecase
-            A3(["Configure delegation"]):::usecase
+            A1(["Manage users, roles, and units"]):::usecase
+            A2(["Configure delegation"]):::usecase
+            A3(["Import budget plan"]):::usecase
         end
 
         subgraph UnitCases["Unit Representative Use Cases"]
             direction TB
-            U1(["Login with CU Net"]):::usecase
-            U2(["Import budget plan"]):::usecase
-            U3(["Create project"]):::usecase
-            U4(["Bulk import projects"]):::usecase
-            U5(["Track project timeline"]):::usecase
+            U1(["Create project"]):::usecase
+            U2(["Track project timeline"]):::usecase
+        end
+
+        subgraph DocStaffCases["Document Staff Use Cases"]
+            direction TB
+            DS1(["Create project"]):::usecase
+            DS2(["Bulk import projects"]):::usecase
+            DS3(["Propose submission for signature"]):::usecase
+            DS4(["Sign and complete submission"]):::usecase
         end
 
         subgraph StaffCases["Procurement Staff Use Cases"]
             direction TB
-            S1(["Login with CU Net"]):::usecase
-            S2(["View assignment pool"]):::usecase
-            S3(["Self-pick job"]):::usecase
-            S4(["Confirm assigned job"]):::usecase
-            S5(["Change or add assignee"]):::usecase
-            S6(["View workload distribution"]):::usecase
-            S7(["Update procurement workflow"]):::usecase
-            S8(["Upload and version documents"]):::usecase
-            S9(["Generate or cancel contract number"]):::usecase
-            S10(["Record asset code check"]):::usecase
-            S11(["Request cancellation"]):::usecase
+            S1(["View assignment pool"]):::usecase
+            S2(["Self-pick job"]):::usecase
+            S3(["Confirm assigned job"]):::usecase
+            S4(["Update project workflow"]):::usecase
+            S5(["Upload and version documents"]):::usecase
+            S6(["Request cancellation"]):::usecase
+            S7(["Complete procurement phase"]):::usecase
         end
 
-        subgraph HeadCases["Head Use Cases"]
+        subgraph HeadCases["Head of Unit / Department Use Cases"]
             direction TB
-            H1(["Login with CU Net"]):::usecase
-            H2(["Assign job"]):::usecase
-            H3(["Change or add assignee"]):::usecase
-            H4(["View workload distribution"]):::usecase
-            H5(["Return job for correction"]):::usecase
-            H6(["Review executive summary"]):::usecase
-            H7(["Approve cancellation"]):::usecase
+            H1(["Assign job"]):::usecase
+            H2(["Change or add assignee"]):::usecase
+            H3(["View workload distribution"]):::usecase
+            H4(["Return job for correction"]):::usecase
+            H5(["Approve submission"]):::usecase
+            H6(["Approve or reject cancellation"]):::usecase
         end
 
         subgraph DirectorCases["Director Use Cases"]
             direction TB
-            D1(["Login with CU Net"]):::usecase
-            D2(["Review executive summary"]):::usecase
+            D1(["Review executive summary"]):::usecase
+            D2(["View workload distribution"]):::usecase
+            D3(["Approve project cancellation"]):::usecase
         end
 
         subgraph VendorCases["Vendor Use Cases"]
@@ -74,9 +76,11 @@ flowchart LR
 
     UnitRep --> U1
     UnitRep --> U2
-    UnitRep --> U3
-    UnitRep --> U4
-    UnitRep --> U5
+
+    DocStaff --> DS1
+    DocStaff --> DS2
+    DocStaff --> DS3
+    DocStaff --> DS4
 
     Staff --> S1
     Staff --> S2
@@ -85,10 +89,6 @@ flowchart LR
     Staff --> S5
     Staff --> S6
     Staff --> S7
-    Staff --> S8
-    Staff --> S9
-    Staff --> S10
-    Staff --> S11
 
     Head --> H1
     Head --> H2
@@ -96,9 +96,9 @@ flowchart LR
     Head --> H4
     Head --> H5
     Head --> H6
-    Head --> H7
 
     Director --> D1
     Director --> D2
+    Director --> D3
 
     Vendor --> V1

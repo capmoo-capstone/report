@@ -1,25 +1,26 @@
 stateDiagram-v2
     %% Project Status State Machine
-    [*] --> Draft: create form
-    Draft --> Created: save project
-    Created --> Unassigned: enter assignment pool
-    Unassigned --> WaitingForAcceptance: head assigns staff
-    Unassigned --> InProgress: staff self-picks job
-    WaitingForAcceptance --> InProgress: staff accepts
-    WaitingForAcceptance --> Unassigned: staff declines or head changes assignee
-    InProgress --> Returned: head returns for correction
-    Returned --> InProgress: staff resubmits
-    InProgress --> ProcurementCompleted: all procurement steps completed
-    ProcurementCompleted --> AssetCheck: prompt asset code check
-    AssetCheck --> ContractManagement: continue to contract phase
-    ContractManagement --> Completed: contract work completed
-    Created --> CancellationPending: cancellation requested
-    Unassigned --> CancellationPending: cancellation requested
-    WaitingForAcceptance --> CancellationPending: cancellation requested
-    InProgress --> CancellationPending: cancellation requested
-    ContractManagement --> CancellationPending: cancellation requested
-    CancellationPending --> Cancelled: head approves
-    CancellationPending --> InProgress: head rejects during procurement
-    CancellationPending --> ContractManagement: head rejects during contract phase
-    Completed --> [*]
-    Cancelled --> [*]
+    [*] --> UNASSIGNED: project created
+
+    UNASSIGNED --> WAITING_ACCEPT: head assigns staff to project
+    UNASSIGNED --> IN_PROGRESS: staff self-picks job from pool
+
+    WAITING_ACCEPT --> IN_PROGRESS: staff accepts assignment
+    WAITING_ACCEPT --> UNASSIGNED: staff declines or head changes assignee
+
+    IN_PROGRESS --> UNASSIGNED: staff returns project to pool\nor general staff completes procurement phase
+
+    IN_PROGRESS --> WAITING_CANCEL: any staff requests cancellation
+    WAITING_CANCEL --> CANCELLED: head approves cancellation
+    WAITING_CANCEL --> IN_PROGRESS: head rejects cancellation
+
+    UNASSIGNED --> WAITING_CANCEL: cancellation requested while unassigned
+    WAITING_ACCEPT --> WAITING_CANCEL: cancellation requested while waiting
+
+    IN_PROGRESS --> CLOSED: finance staff closes project\nafter financial process completes
+
+    CLOSED --> REQUEST_EDIT: finance staff marks project for edit
+    REQUEST_EDIT --> CLOSED: finance staff closes project again
+
+    CANCELLED --> [*]
+    CLOSED --> [*]: final closed state
