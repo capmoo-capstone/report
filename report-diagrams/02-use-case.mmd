@@ -5,12 +5,10 @@ flowchart LR
     classDef group fill:#fffde7,stroke:#d6c94f,stroke-width:1px,color:#0f172a;
 
     Admin["Admin"]:::actor
-    UnitRep["Unit Representative"]:::actor
-    Staff["Procurement Staff / General Staff"]:::actor
+    UnitRep["Representative"]:::actor
+    Staff["General / Finance Staff"]:::actor
     DocStaff["Document Staff"]:::actor
-    Head["Head of Unit / Department"]:::actor
-    Director["Director"]:::actor
-    Vendor["Vendor"]:::actor
+    Head["Head of Unit / Dept"]:::actor
 
     subgraph System["Nexus Procure MVP"]
         direction TB
@@ -22,21 +20,20 @@ flowchart LR
             A3(["Import budget plan"]):::usecase
         end
 
-        subgraph UnitCases["Unit Representative Use Cases"]
+        subgraph UnitCases["Representative Use Cases"]
             direction TB
-            U1(["Create project"]):::usecase
+            U1(["Create project request"]):::usecase
             U2(["Track project timeline"]):::usecase
         end
 
         subgraph DocStaffCases["Document Staff Use Cases"]
             direction TB
-            DS1(["Create project"]):::usecase
-            DS2(["Bulk import projects"]):::usecase
-            DS3(["Propose submission for signature"]):::usecase
-            DS4(["Sign and complete submission"]):::usecase
+            DS1(["Create project (Manual / Bulk)"]):::usecase
+            DS2(["Propose submission for signature"]):::usecase
+            DS3(["Sign and complete submission"]):::usecase
         end
 
-        subgraph StaffCases["Procurement Staff Use Cases"]
+        subgraph StaffCases["General / Finance Staff Use Cases"]
             direction TB
             S1(["View assignment pool"]):::usecase
             S2(["Self-pick job"]):::usecase
@@ -44,10 +41,10 @@ flowchart LR
             S4(["Update project workflow"]):::usecase
             S5(["Upload and version documents"]):::usecase
             S6(["Request cancellation"]):::usecase
-            S7(["Complete procurement phase"]):::usecase
+            S7(["Complete procurement / contract phase"]):::usecase
         end
 
-        subgraph HeadCases["Head of Unit / Department Use Cases"]
+        subgraph HeadCases["Head Use Cases"]
             direction TB
             H1(["Assign job"]):::usecase
             H2(["Change or add assignee"]):::usecase
@@ -55,18 +52,6 @@ flowchart LR
             H4(["Return job for correction"]):::usecase
             H5(["Approve submission"]):::usecase
             H6(["Approve or reject cancellation"]):::usecase
-        end
-
-        subgraph DirectorCases["Director Use Cases"]
-            direction TB
-            D1(["Review executive summary"]):::usecase
-            D2(["View workload distribution"]):::usecase
-            D3(["Approve project cancellation"]):::usecase
-        end
-
-        subgraph VendorCases["Vendor Use Cases"]
-            direction TB
-            V1(["Submit delivery documents"]):::usecase
         end
     end
 
@@ -80,7 +65,6 @@ flowchart LR
     DocStaff --> DS1
     DocStaff --> DS2
     DocStaff --> DS3
-    DocStaff --> DS4
 
     Staff --> S1
     Staff --> S2
@@ -96,9 +80,3 @@ flowchart LR
     Head --> H4
     Head --> H5
     Head --> H6
-
-    Director --> D1
-    Director --> D2
-    Director --> D3
-
-    Vendor --> V1

@@ -22,7 +22,6 @@ flowchart LR
         VendorPortal["Vendor Portal"]:::system
     end
 
-    OAuth["OAuth Provider"]:::external
     DB[("Application Database")]:::storage
     FileStore[("File Storage")]:::storage
 
@@ -41,4 +40,3 @@ flowchart LR
     API --> Documents
     API --> DB
     Documents --> FileStore
-    Auth --> OAuth

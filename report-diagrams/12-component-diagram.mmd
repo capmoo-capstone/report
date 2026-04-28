@@ -24,7 +24,6 @@ flowchart LR
         Audit["Audit Log Service"]:::service
     end
 
-    LDAP["CU Net LDAP"]:::external
     DB[("Database")]:::storage
     Files[("File Storage")]:::storage
 
@@ -38,7 +37,7 @@ flowchart LR
     WebApp --> Document
     WebApp --> Contract
     VendorPage --> VendorSvc
-    Auth --> LDAP
+    Auth --> DB
     UserUnit --> DB
     Project --> DB
     Assignment --> DB

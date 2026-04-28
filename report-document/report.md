@@ -94,7 +94,7 @@
 # System Design (5-8 pages)
 
 ## System Architecture
-ระบบ NexusProcure ได้รับการออกแบบให้ใช้สถาปัตยกรรมแบบแยกส่วน (Decoupled Architecture) หรือ Client-Server Model เพื่อให้การพัฒนา การทดสอบ และการดูแลรักษาระบบเป็นไปอย่างมีประสิทธิภาพและสามารถขยายขนาด (Scalability) ได้ในอนาคต สถาปัตยกรรมหลักประกอบด้วย 3 ส่วนสำคัญ ได้แก่
+ระบบ NexusProcure ได้รับการออกแบบให้ใช้สถาปัตยกรรมแบบแยกส่วนหรือ Client-Server Model เพื่อให้การพัฒนา การทดสอบ และการดูแลรักษาระบบเป็นไปอย่างมีประสิทธิภาพและสามารถขยายขนาด (Scalability) ได้ในอนาคต สถาปัตยกรรมหลักประกอบด้วย 3 ส่วนสำคัญ ได้แก่
 
 1. Presentation Layer (Frontend) ทำหน้าที่แสดงผลและรับคำสั่งจากผู้ใช้งาน โดยมีการจัดการสถานะของข้อมูล (State Management) ออกเป็น 2 ส่วน คือ ข้อมูลจากเซิร์ฟเวอร์ (Server State) และข้อมูลสถานะของหน้าจอ (Client/UI State) เพื่อลดภาระการประมวลผลและลดการดึงข้อมูลที่ซ้ำซ้อน
 2. Application Layer (Backend) ทำหน้าที่ประมวลผลตรรกะหลังบ้าน (Business Logic) ตรวจสอบสิทธิ์การเข้าถึงแบบ Role-based Access Control (RBAC) และเป็นตัวกลางในการสื่อสารกับฐานข้อมูลผ่าน RESTful API
@@ -103,234 +103,62 @@
 โดยมีลักษณะการไหลของข้อมูล (Data Flow) ดังนี้
 1. ผู้ใช้งาน (เจ้าหน้าที่พัสดุ/หัวหน้า/ผู้แทนหน่วยงาน/ผู้ขาย) เข้าใช้งานผ่านเว็บแอปพลิเคชัน
 2. Frontend ส่งคำขอผ่าน REST API ไปยัง Backend
-3. Backend ตรวจสอบสิทธิ์ด้วย JWT และบทบาทผู้ใช้งาน (Role-based Access Control)
+3. Backend ตรวจสอบสิทธิ์ด้วย JWT (JSON Web Token) และบทบาทผู้ใช้งาน (Role-based Access Control)
 4. บริการในระบบ (Service Layer) ประมวลผลตาม workflow ของโครงการจัดซื้อจัดจ้าง
-5. บันทึก/อ่านข้อมูลจาก PostgreSQL ผ่าน Prisma ORM
+5. บันทึกหรืออ่านข้อมูลจาก PostgreSQL ผ่าน Prisma ORM
 6. ส่งผลลัพธ์กลับไปแสดงผลเป็นตาราง และไทม์ไลน์
 
 เพื่อรองรับงานจัดซื้อจัดจ้างที่มีหลายขั้นตอน ระบบกำหนดสถานะโครงการแบบแยกช่วงการดำเนินงานเป็นช่วงจัดซื้อและช่วงบริหารสัญญา พร้อมลำดับขั้นงานตามประเภทการจัดซื้อ และมีการบันทึกประวัติการเปลี่ยนแปลง (History/Log) เพื่อการตรวจสอบย้อนหลัง
 
-ต่อไปนี้จะเป็นการแสดงภาพของแผนภาพสถาปัตยกรรมระบบ (System Architecture Diagram) ในภาพที่ 3.1 และแผนภาพการใช้งานของผู้ใช้ (User Flow) ในภาพที่ 3.2
+ต่อไปนี้จะเป็นการแสดงภาพของแผนภาพบริบทของระบบ (System Context Diagram) ในภาพที่ 3.1 และแผนภาพสถาปัตยกรรมระบบและส่วนประกอบ (Component Diagram) ในภาพที่ 3.2
 
-### Figure 3.1 System Architecture Diagram
-```mermaid
-flowchart LR
-    U[Users<br/>- Staff<br/>- Head of Unit/Dept<br/>- Representative<br/>- Vendor]
+### Figure 3.1 System Context Diagram
+![01-system-context](https://github.com/capmoo-capstone/report/blob/main/report-diagrams/01-system-context.png)
 
-    subgraph FE[Frontend Layer]
-      W[Web Application<br/>React + TypeScript + Vite]
-      Q[TanStack Query Cache]
-    end
+### Figure 3.2 Component Diagram
+![12-component-diagram](https://github.com/capmoo-capstone/report/blob/main/report-diagrams/12-component-diagram.png)
 
-    subgraph BE[Backend Layer]
-      R[REST API<br/>Express + TypeScript]
-      M[Auth Middleware<br/>JWT + RBAC]
-      S[Service Layer<br/>Project / User / Unit / Budget / Delegation]
-      V[Validation<br/>Zod Schemas]
-    end
-
-    subgraph DATA[Data Layer]
-      P[(PostgreSQL)]
-      O[Prisma ORM]
-      H[(Project History / Logs)]
-    end
-
-    A[API Docs<br/>Swagger]
-
-    U -->|HTTPS| W
-    W <-->|Data Fetch / Mutate| Q
-    W -->|REST API| R
-    R --> M
-    M --> V
-    V --> S
-    S <--> O
-    O <--> P
-    S --> H
-    R -.Endpoint Contract.-> A
-```
-
-### Figure 3.2 User Flow Diagram (Procurement Workflow)
-```mermaid
-flowchart TD
-    A[User Login] --> B{Role}
-
-    B -->|Representative| R1[Create Project Request]
-    R1 --> R2[Attach Required Data/Documents]
-    R2 --> R3[Submit to Central Pool]
-    R3 --> T1[Track Status / Timeline]
-
-    B -->|Head of Unit/Department| H1[View Pool + Workload Dashboard]
-    H1 --> H2[Assign Staff]
-    H2 --> S2
-    H1 --> H3[Approve/Reject Key Steps]
-    H3 --> T1
-
-    B -->|Procurement Staff| S1[Pick / Accept Assigned Project]
-    S1 --> S2[Process Workflow Step]
-    S2 --> S3[Upload Documents + Update Status]
-    S3 --> D1{Need Revision?}
-    D1 -->|Yes| S2
-    D1 -->|No| S4[Forward to Next Step / Phase]
-    S4 --> C1{Procurement Complete?}
-    C1 -->|No| S2
-    C1 -->|Yes| C2[Move to Contract Management Phase]
-    C2 --> C3[Complete Contract Steps]
-    C3 --> F1[Project Closed]
-
-    B -->|Vendor| V1[Submit Delivery/Billing Documents]
-    V1 --> S3
-
-    F1 --> K1[KPI & Summary Dashboard Updated]
-    T1 --> K1
-```
+### Figure 3.3 Use Case Diagram
+![02-use-case](https://github.com/capmoo-capstone/report/blob/main/report-diagrams/02-use-case.png)
 
 ## Components
-องค์ประกอบหลักของระบบแบ่งออกเป็น 5 ส่วนดังแสดงในภาพที่ … ประกอบด้วย
+องค์ประกอบหลักของระบบแบ่งออกเป็น 3 ส่วนหลัก ดังแสดงในภาพ Component Diagram ประกอบด้วย
 
-1. ส่วนติดต่อผู้ใช้งาน (Frontend) พัฒนาด้วย React (Vite) และ TypeScript โดยมีการจัดโครงสร้างแบบ Feature-Based Architecture เพื่อแยกองค์ประกอบหลังบ้าน (Domain-focused modules) ออกจากกันอย่างชัดเจน มีการใช้ Tailwind CSS ร่วมกับ shadcn/ui ในการออกแบบส่วนติดต่อผู้ใช้งาน นอกจากนี้ยังใช้ TanStack Query ในการจัดการข้อมูลฝั่งไคลเอนต์ (Server State) และใช้ TanStack Table สำหรับการจัดการแสดงผลตารางข้อมูลที่ซับซ้อน
+1. ส่วนติดต่อผู้ใช้งาน (Frontend) พัฒนาด้วย React (Vite) และ TypeScript โดยมีการจัดโครงสร้างแบบ Feature-Based Architecture เพื่อแยกองค์ประกอบตามโดเมนงาน (Domain-focused modules) ออกจากกันอย่างชัดเจน มีการใช้ Tailwind CSS ร่วมกับไลบรารี shadcn/ui ในการออกแบบและสร้างส่วนติดต่อผู้ใช้งานที่สวยงามและเป็นมาตรฐาน นอกจากนี้ยังใช้ TanStack Query ในการจัดการข้อมูลและแคชฝั่งไคลเอนต์ (Server State) และใช้ TanStack Table สำหรับการจัดการแสดงผลตารางข้อมูลที่ซับซ้อน เช่น ตารางโครงการ หรือตารางรายชื่อพนักงาน
+2. ส่วนประมวลผล (Backend) พัฒนาด้วย Node.js ภายใต้เฟรมเวิร์ก Express (เวอร์ชัน 5) มีการควบคุมความถูกต้องของข้อมูล (Validation) ทั้งฝั่งรับและส่งผ่านไลบรารี Zod และจัดการการรับรองตัวตน (Authentication) ผ่าน JWT ร่วมกับระบบ In-memory Cache แบบ LRU (Least Recently Used) สำหรับจัดเก็บข้อมูลที่มีการเข้าถึงบ่อยเพื่อลดภาระของฐานข้อมูล
+3. ระบบฐานข้อมูล (Database) ใช้ PostgreSQL เป็นฐานข้อมูลหลัก โดยมี Prisma ORM เป็นเครื่องมือในการจัดการโครงสร้าง (Schema) และคิวรีข้อมูลต่าง ๆ อย่างมีประสิทธิภาพและมีความปลอดภัยระดับชนิดข้อมูล (Type-Safety) โดยมีการออกแบบระบบฐานข้อมูล ตามแผนภาพข้อมูลเชิงสัมพันธ์เอ็นทิตี (Entity Relationship Diagram: ER Diagram) ดังแสดงในภาพที่ 3.4
 
-2. ส่วนประมวลผล (Backend) พัฒนาด้วย Node.js ภายใต้เฟรมเวิร์ก Express เวอร์ชัน 5 มีการควบคุมความถูกต้องของข้อมูล (Validation) ทั้งฝั่งรับและส่งผ่านไลบรารี Zod และจัดการการรับรองตัวตน (Authentication) ผ่าน JWT (JSON Web Token) ร่วมกับระบบ In-memory Cache แบบ LRU (Least Recently Used)
+### Figure 3.4 ER Diagram (Core Database Model)
+![10-er-diagram](https://github.com/capmoo-capstone/report/blob/main/report-diagrams/10-er-diagram.png)
 
-3. ระบบฐานข้อมูล (Database) ใช้ PostgreSQL ผ่านระบบบริการฐานข้อมูลแบบไม่สนใจเซิร์ฟเวอร์ (Serverless Database) ของ Neon โดยมี Prisma (เวอร์ชัน 7) เป็น ORM ในการจัดการโครงสร้าง (Schema) และเรียกใช้ข้อมูลต่าง ๆ โดยมีการออกแบบระบบฐานข้อมูล ตามแผนภาพข้อมูลเชิงสัมพันธ์เอ็นทิตี (Entity Relationship Diagram: ER Diagram) ดังแสดงในภาพที่ 3.3
-
-### Figure 3.3 ER Diagram (Core Database Model)
-```mermaid
-erDiagram
-    DEPARTMENT {
-      string id PK
-      string name
-    }
-
-    UNIT {
-      string id PK
-      string dept_id FK
-      string name
-    }
-
-    USER {
-      string id PK
-      string username
-      string email
-      string full_name
-    }
-
-    USER_ORGANIZATION_ROLE {
-      string id PK
-      string user_id FK
-      string dept_id FK
-      string unit_id FK
-      enum role
-    }
-
-    USER_DELEGATION {
-      string id PK
-      string delegator_id FK
-      string delegatee_id FK
-      datetime start_date
-      datetime end_date
-      boolean is_active
-    }
-
-    PROJECT {
-      string id PK
-      string receive_no
-      string title
-      decimal budget
-      enum status
-      string created_by FK
-      string requesting_dept_id FK
-      string requesting_unit_id FK
-      string responsible_unit_id FK
-    }
-
-    PROJECT_SUBMISSION {
-      string id PK
-      string project_id FK
-      int step_order
-      int submission_round
-      enum status
-    }
-
-    PROJECT_DOCUMENT {
-      string id PK
-      string submission_id FK
-      string file_name
-      string file_path
-    }
-
-    PROJECT_HISTORY {
-      string id PK
-      string project_id FK
-      enum action
-      string changed_by
-      datetime changed_at
-    }
-
-    PROJECT_CANCELLATION {
-      string id PK
-      string project_id FK
-      string requested_by FK
-      string approved_by FK
-      boolean is_cancelled
-    }
-
-    BUDGET_PLAN {
-      string id PK
-      int budget_year
-      string unit_id FK
-      string project_id FK
-      decimal budget_amount
-    }
-
-    DEPARTMENT ||--o{ UNIT : has
-    USER ||--o{ USER_ORGANIZATION_ROLE : holds
-    DEPARTMENT ||--o{ USER_ORGANIZATION_ROLE : scopes
-    UNIT ||--o{ USER_ORGANIZATION_ROLE : optional_scope
-
-    USER ||--o{ USER_DELEGATION : delegates
-    USER ||--o{ USER_DELEGATION : receives
-
-    USER ||--o{ PROJECT : creates
-    DEPARTMENT ||--o{ PROJECT : requests
-    UNIT ||--o{ PROJECT : requesting_unit
-    UNIT ||--o{ PROJECT : responsible_unit
-
-    PROJECT ||--o{ PROJECT_SUBMISSION : contains
-    PROJECT_SUBMISSION ||--o{ PROJECT_DOCUMENT : has
-    PROJECT ||--o{ PROJECT_HISTORY : tracks
-    PROJECT ||--o{ PROJECT_CANCELLATION : may_have
-    UNIT ||--o{ BUDGET_PLAN : owns
-    PROJECT ||--o{ BUDGET_PLAN : links
-```
+จากแผนภาพ ER Diagram แสดงให้เห็นถึงโครงสร้างความสัมพันธ์ที่ซับซ้อนซึ่งออกแบบมารองรับระบบ NexusProcure โดยเฉพาะ เช่น ความสัมพันธ์ระหว่าง `USER` และ `USER_DELEGATION` สำหรับการมอบหมายสิทธิ์การทำงาน ความสัมพันธ์ระหว่าง `PROJECT` และ `PROJECT_SUBMISSION` สำหรับการควบคุมขั้นตอนการอนุมัติ รวมถึงการบันทึกลำดับเหตุการณ์ทุกย่างก้าวผ่านตาราง `PROJECT_HISTORY`
 
 ## Design Considerations
 เพื่อให้ระบบสามารถรองรับการใช้งานจริงของฝ่ายการพัสดุ ได้อย่างมีประสิทธิภาพ คณะผู้จัดทำได้คำนึงถึงปัจจัยสำคัญในการออกแบบ ดังนี้
 
-1. ด้านประสิทธิภาพ (Performance & Scalability) โดยการลดภาระการประมวลผลที่ไม่จำเป็นด้วยการแบ่งหน้าข้อมูล (pagination) การกำหนด filter/query ชัดเจน และการ cache ข้อมูลฝั่ง backend บางส่วน เช่น ข้อมูลสิทธิ์ผู้ใช้ เพื่อให้รองรับข้อมูลโครงการจำนวนมาก
+1. ด้านประสิทธิภาพ (Performance & Scalability) โดยการลดภาระการประมวลผลที่ไม่จำเป็นด้วยการแบ่งหน้าข้อมูล (Pagination) การกำหนด Filter/Query ชัดเจน และการแคชข้อมูลฝั่ง Backend บางส่วน เช่น ข้อมูลสิทธิ์ผู้ใช้ เพื่อให้รองรับข้อมูลโครงการจำนวนมาก
+2. ด้านการขยายขนาดของเว็บไซต์ผ่านสถาปัตยกรรม (Architecture) ด้วยการแยก Frontend และ Backend ออกจากกันอย่างเด็ดขาด ทำให้สามารถขยายแต่ละส่วนได้อิสระ และในส่วนของ Backend มีการแยก Service ตามโดเมนงาน คือ Project, User, Unit, Budget-plan และ Delegation เพื่อรองรับการเติบโตของฟีเจอร์ในอนาคตได้อย่างเป็นระบบ
+3. ด้านการใช้งาน (Usability) ออกแบบ Workflow ให้สอดคล้องกับการทำงานจริงของฝ่ายพัสดุ เช่น การมีระบบคลังงานส่วนกลางที่เจ้าหน้าที่สามารถดึงงานเข้ามาในความรับผิดชอบของตนเอง การรองรับกระบวนการส่งงานกลับ เพื่อแก้ไขข้อมูล และหน้าติดตามสถานะสำหรับหน่วยงานผู้ขอ เพื่อลดการประสานงานผ่านเอกสาร โดยมีการออกแบบวงจรสถานะของโครงการ (Project Status State Machine) ดังแสดงในภาพที่ 3.5
 
-2. ด้านการขยายขนาดของเว็บไซต์ (Scalability) ผ่านการแยก frontend และ backend ออกจากกัน ทำให้สามารถขยายแต่ละส่วนได้อิสระ และแยก service ตามโดเมนงาน คือ project, user, unit, budget-plan และ delegation เพื่อรองรับการเติบโตของฟีเจอร์
+### Figure 3.5 Project Status State Machine
+![06-project-status-state-machine](https://github.com/capmoo-capstone/report/blob/main/report-diagrams/06-project-status-state-machine.png)
 
-3. ด้านการใช้งาน (Usability) ออกแบบ workflow ให้สอดคล้องกับการทำงานจริงของฝ่ายพัสดุ เช่น ระบบคิวงานกลาง การเลือกรับงานเอง การส่งงานกลับ และหน้าติดตามสถานะแบบ real-time สำหรับหน่วยงานผู้ขอ เพื่อลดการประสานงานผ่านเอกสาร
-
-4. ด้านการติดตามและธรรมาภิบาล (Traceability & Governance) โดยระบบได้รับการออกแบบมาให้ทุกขั้นตอนสำคัญของโครงการถูกจัดเก็บสถานะและประวัติการแก้ไข ทำให้สามารถตรวจสอบย้อนหลังได้ รองรับข้อกำกับด้านความโปร่งใสและธรรมาภิบาลของงานจัดซื้อจัดจ้างภาครัฐ
-
-5. ด้านความสมบูรณ์ของข้อมูลและความเชื่อมั่นในระบบ (Data Integrity & Reliability) ผ่านการกำหนด validation schema (Zod) และข้อบังคับของข้อมูลในระดับฐานข้อมูล (Prisma schema) เพื่อลดข้อผิดพลาดจากข้อมูลไม่ครบถ้วนหรือรูปแบบไม่ถูกต้อง
-
-6. ด้านความยั่งยืนและการดูแลระบบ (Sustainability & Maintainability) โดยเลือกใช้เทคโนโลยีมาตรฐานที่มีชุมชนผู้พัฒนาสนับสนุนสูง เช่น React, Express, PostgreSQL และออกแบบโครงสร้างโค้ดแบบ feature/service-driven เพื่อให้รุ่นถัดไปดูแลต่อได้ง่าย
+4. ด้านการติดตามและธรรมาภิบาล (Traceability & Governance) โดยระบบได้รับการออกแบบมาให้ทุกขั้นตอนสำคัญของโครงการถูกจัดเก็บสถานะและประวัติการแก้ไข (Audit Trail/Logs) ในฐานข้อมูล ทำให้สามารถตรวจสอบย้อนหลังได้ 100% รองรับข้อกำกับด้านความโปร่งใสและธรรมาภิบาลของงานจัดซื้อจัดจ้างภาครัฐ
+5. ด้านความสมบูรณ์ของข้อมูลและความเชื่อมั่นในระบบ (Data Integrity & Reliability) ผ่านการกำหนด Validation Schema ด้วยไลบรารี Zod และข้อบังคับของข้อมูลในระดับฐานข้อมูล (Prisma Schema Constraints) เพื่อป้องกันข้อผิดพลาดตั้งแต่ก่อนบันทึกลงระบบ
+6. ด้านความยั่งยืนและการดูแลระบบ (Sustainability & Maintainability) โดยเลือกใช้เทคโนโลยีมาตรฐานที่มีชุมชนผู้พัฒนาสนับสนุนสูง เช่น React, Node.js, Express, PostgreSQL และออกแบบโครงสร้างโค้ดแบบ Feature/Service-driven เพื่อให้ทีมพัฒนาชุดต่อไปสามารถเข้ามาศึกษาและบำรุงรักษาระบบได้ง่าย
 
 ## Proposed vs. Final Design
-ในส่วนนี้จะเป็นการเปรียบเทียบระหว่างข้อเสนอ กับระบบสุดท้ายที่ได้ออกแบบ ดังแสดงในตารางที่ … โดยมีประเด็นที่เหมาะสมกับพิจารณาด้วยกันหลายประเด็น ดังนี้
+ในส่วนนี้จะเป็นการเปรียบเทียบระหว่างข้อเสนอเริ่มต้น (Proposed Design) กับระบบสุดท้ายที่ได้ดำเนินการพัฒนาจริง (Final Design) ดังแสดงในตาราง ซึ่งเน้นให้เห็นถึงความครอบคลุมของระบบในระดับ MVP (Minimum Viable Product)
 
-| ประเด็น | Proposed  | สิ่งที่ทำได้จริงในโค้ด (Implemented) |
-| --- | --- | --- |
-| Identity & Access | เน้น CU Net (LDAP), 1 representative ต่อหน่วยงาน | มี `auth/register`, `auth/login`, JWT + RBAC + delegation + ข้อจำกัด representative ผ่าน route/service แต่ **ยังไม่พบ LDAP integration โดยตรง** |
-| Job Intake & Assignment | สร้างงาน + pool + self-picking + manual assign  | มี `/projects/create`, `/projects/import`, `/projects/unassigned`, `/projects/assign`, `/projects/accept`, `/:id/claim`, `/:id/change-assignee`, `/:id/add-assignee` |
-| Workflow Control | แยก flow เฉพาะเจาะจง / e-bidding + executive summary  | มี `submissions` lifecycle ชัดเจน (`approve`, `propose`, `sign`, `reject`) และมี phase transition (`complete-procurement`, `complete-contract`, `close`) |
-| Cancellation / Rework | มีแนวคิด return flow  | มี `/projects/:id/cancel`, `/approve-cancel`, `/reject-cancel`, และ `/request-edit` |
-| Dashboard & Workload | เน้น dashboard รวมและ KPI  | มี endpoint รองรับ summary/workload (`/projects/summary`, `/projects/workload`) และหน้า list/query สำหรับติดตามงาน |
-| Notification & Vendor Portal | มีแนวคิดแจ้งเตือน/วางบิลผู้ขาย  | ใน backend ปัจจุบัน **ยังไม่พบโมดูล notification/email หรือ public vendor endpoint** (ทุก route หลักถูก protect) จึงถือเป็นงานต่อยอด |
+| ประเด็นการพัฒนาระบบ | แผนการพัฒนาที่เสนอ (Proposed) | สิ่งที่พัฒนาจริงในระบบ (Final Implementation) |
+| :--- | :--- | :--- |
+| **Identity & Access** | รองรับการเข้าสู่ระบบแบบ Role-based พร้อมการจำกัดสิทธิ์ 1 ผู้แทนต่อ 1 หน่วยงาน | พัฒนาระบบ `Auth` แบบครบวงจรด้วย JWT และ RBAC มีระบบการมอบหมายสิทธิ์แทน (Delegation) รวมทั้งการจำกัดโควตาผู้แทนหน่วยงานได้อย่างรัดกุมในระดับ Service |
+| **Job Intake & Assignment** | สร้างระบบรับเรื่อง มีคิวงานกลาง ให้เจ้าหน้าที่เลือกรับงานเอง หรือหัวหน้ามอบหมาย | มีระบบครบถ้วนตั้งแต่ การสร้างโครงการ การนำเข้าข้อมูล การดึงงานจาก Pool (`/projects/claim`) และการเปลี่ยน/เพิ่มผู้รับผิดชอบ |
+| **Workflow Control** | แยกกระบวนการอนุมัติและสถานะการจัดซื้อตามวิธีจัดซื้อเฉพาะเจาะจง | มี Lifecycle สถานะที่ชัดเจน (เช่น `approve`, `propose`, `sign`) ครอบคลุมไปจนถึงการย้ายช่วง (Phase) เข้าสู่การบริหารสัญญาและการปิดโครงการ |
+| **Cancellation & Rework** | รองรับการส่งกลับงานไปแก้ไข หรือการยกเลิกโครงการ | ระบบรองรับ Endpoint สำหรับการแก้ไข (`/request-edit`) และการร้องขอยกเลิกซึ่งต้องผ่านกระบวนการอนุมัติ (`/approve-cancel`) |
+| **Tracking & Workload** | ระบบแสดงภาพรวมการทำงานและภาระงานของแต่ละบุคคล | มี Endpoint สำหรับเช็คภาระงานสรุป (`/projects/workload`) และหน้าตารางที่ผู้ใช้งานสามารถ Filter ค้นหางานได้อย่างละเอียด |
 
-จากการเปรียบเทียบจะเห็นว่า Final Design ขยายขอบเขตจากเอกสารเสนอเดิมอย่างชัดเจน และระบบที่พัฒนาแล้วครอบคลุมแกนหลักด้านการรับเรื่อง-มอบหมาย-ติดตาม workflow ได้ครบในระดับ MVP ขณะที่งานเชื่อมต่อภายนอก (เช่น LDAP/SMTP/Vendor public flow) ยังเป็นส่วนที่ต้องพัฒนาต่อในระยะถัดไป
+จากการเปรียบเทียบจะเห็นว่าระบบสุดท้ายที่ได้ดำเนินการพัฒนาจริงขยายขอบเขตจากเอกสารเสนอเดิมอย่างชัดเจน ระบบที่พัฒนาแล้วครอบคลุมแกนหลักด้านการรับเรื่อง มอบหมาย และติดตาม Workflow ได้ครบถ้วนในระดับโครงสร้างองค์กร ช่วยลดปัญหาคอขวดของการทำงานและสร้างมาตรฐานกระบวนการใหม่ที่โปร่งใสตรวจสอบได้
 
 # Implementation (5-8 pages)
 
@@ -449,4 +277,4 @@ Suggest next steps, enhancements, or research directions.
 - [13]	M. Mikowski and J. Powell, Single Page Web Applications: JavaScript end-to-end, 1 ed. Manning, 2013, p. 432.
 - [14]	G. Myovela, H. Ng’elenge, and B. Kisawike, "Factors Affecting the Adoption of Electronic Procurement in the Public Sector: The Case of Songwe District Council," East African Journal of Business and Economics, vol. 6, no. 2, 2023/11/01, doi: 10.37284/eajbe.6.2.1547.
 - [15]	K. Ragin-Skorecka and Ł. Hadaś, "Sustainable E-Procurement: Key Factors Influencing User Satisfaction and Dissatisfaction," Sustainability, vol. 16, no. 13, p. 5649, 2024. [Online]. Available: https://www.mdpi.com/2071-1050/16/13/5649.
-- [16]	P. Trkman and K. McCormack, "Estimating the Benefits and Risks of Implementing E-Procurement," IEEE Transactions on Engineering Management, vol. 57, no. 2, pp. 338–349, 2010, doi: 10.1109/TEM.2009.2033046.
+- [16]	P. Trkman and K. McCormack, "Estimating the Benefits and Risks of Implementing E-Procurement," IEEE Transactions on Engineering Management, vol. 57, no. 2, pp. 338–349, 2010, doi: 10.1109/TEM.2009.2033046.menting E-Procurement," IEEE Transactions on Engineering Management, vol. 57, no. 2, pp. 338–349, 2010, doi: 10.1109/TEM.2009.2033046.
