@@ -1,0 +1,40 @@
+flowchart TD
+    %% Procurement Workflow Activity
+    classDef action fill:#eff6ff,stroke:#2563eb,color:#0f172a;
+    classDef decision fill:#fef9c3,stroke:#ca8a04,color:#0f172a;
+    classDef state fill:#ecfdf5,stroke:#047857,color:#0f172a;
+    classDef stop fill:#fee2e2,stroke:#dc2626,color:#0f172a;
+
+    Start((Start))
+    SelectMethod["Select procurement method"]:::action
+    BuildSteps["System loads matching workflow steps"]:::action
+    Work["Staff completes current step"]:::action
+    Upload["Upload supporting documents"]:::action
+    Version["Store document version and audit log"]:::action
+    Review{"Head review needed?"}:::decision
+    Return{"Return for correction?"}:::decision
+    Reason["Record return reason"]:::action
+    Next{"More procurement steps?"}:::decision
+    AssetPrompt["Ask whether asset code is required"]:::action
+    AssetRecord["Record asset code result"]:::action
+    Contract["Generate contract number when contract starts"]:::action
+    ContractPhase["Manage contract phase"]:::state
+    CancelNeed{"Cancellation requested?"}:::decision
+    CancelReview["Head reviews cancellation reason"]:::action
+    CancelApproved{"Approved?"}:::decision
+    Cancelled["Project status becomes Cancelled"]:::stop
+    Completed["Project status becomes Completed"]:::state
+    End((End))
+
+    Start --> SelectMethod --> BuildSteps --> Work --> Upload --> Version --> Review
+    Review -- "Yes" --> Return
+    Review -- "No" --> Next
+    Return -- "Yes" --> Reason --> Work
+    Return -- "No" --> Next
+    Next -- "Yes" --> Work
+    Next -- "No" --> AssetPrompt --> AssetRecord --> Contract --> ContractPhase
+    ContractPhase --> CancelNeed
+    CancelNeed -- "Yes" --> CancelReview --> CancelApproved
+    CancelApproved -- "Yes" --> Cancelled --> End
+    CancelApproved -- "No" --> ContractPhase
+    CancelNeed -- "No" --> Completed --> End

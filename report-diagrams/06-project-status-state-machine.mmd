@@ -1,0 +1,25 @@
+stateDiagram-v2
+    %% Project Status State Machine
+    [*] --> Draft: create form
+    Draft --> Created: save project
+    Created --> Unassigned: enter assignment pool
+    Unassigned --> WaitingForAcceptance: head assigns staff
+    Unassigned --> InProgress: staff self-picks job
+    WaitingForAcceptance --> InProgress: staff accepts
+    WaitingForAcceptance --> Unassigned: staff declines or head changes assignee
+    InProgress --> Returned: head returns for correction
+    Returned --> InProgress: staff resubmits
+    InProgress --> ProcurementCompleted: all procurement steps completed
+    ProcurementCompleted --> AssetCheck: prompt asset code check
+    AssetCheck --> ContractManagement: continue to contract phase
+    ContractManagement --> Completed: contract work completed
+    Created --> CancellationPending: cancellation requested
+    Unassigned --> CancellationPending: cancellation requested
+    WaitingForAcceptance --> CancellationPending: cancellation requested
+    InProgress --> CancellationPending: cancellation requested
+    ContractManagement --> CancellationPending: cancellation requested
+    CancellationPending --> Cancelled: head approves
+    CancellationPending --> InProgress: head rejects during procurement
+    CancellationPending --> ContractManagement: head rejects during contract phase
+    Completed --> [*]
+    Cancelled --> [*]

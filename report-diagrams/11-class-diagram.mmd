@@ -1,0 +1,87 @@
+classDiagram
+    direction LR
+
+    class UserService {
+        +login(username, password)
+        +mapUserToUnit(userId, unitId, roleId)
+        +configureDelegation(request)
+    }
+
+    class ProjectService {
+        +createProject(request)
+        +importProjects(file)
+        +createFromBudgetPlan(planIds)
+        +cancelProject(projectId, reason)
+    }
+
+    class AssignmentService {
+        +placeInPool(projectId)
+        +selfPick(projectId, staffId)
+        +assign(projectId, staffId)
+        +confirmAssignment(assignmentId)
+        +changeAssignee(projectId, staffId)
+        +addAssignee(projectId, staffId)
+    }
+
+    class WorkflowService {
+        +loadSteps(procurementMethod)
+        +completeStep(projectId, stepId)
+        +returnStep(projectId, stepId, reason)
+        +checkAssetCode(projectId, result)
+    }
+
+    class DocumentService {
+        +uploadDocument(projectId, stepId, file)
+        +createVersion(documentId, file)
+        +exportTimeline(projectId)
+        +exportDocumentSet(projectId)
+    }
+
+    class ContractService {
+        +generateContractNumber(projectId, fiscalYear)
+        +cancelContractNumber(contractId, reason)
+        +resetSequenceByFiscalYear()
+    }
+
+    class VendorSubmissionService {
+        +verifyPoNumber(poNumber)
+        +submitDelivery(poNumber, file)
+    }
+
+    class AuditLogService {
+        +recordAction(actorId, projectId, action)
+    }
+
+    class Project {
+        +id
+        +receiveNo
+        +title
+        +status
+        +urgency
+    }
+
+    class Assignment {
+        +id
+        +status
+        +assignedAt
+        +acceptedAt
+    }
+
+    class DocumentVersion {
+        +id
+        +versionNo
+        +filePath
+        +uploadedAt
+    }
+
+    UserService --> AuditLogService
+    ProjectService --> AssignmentService
+    ProjectService --> AuditLogService
+    AssignmentService --> Project
+    AssignmentService --> Assignment
+    WorkflowService --> Project
+    WorkflowService --> AuditLogService
+    DocumentService --> DocumentVersion
+    DocumentService --> AuditLogService
+    ContractService --> Project
+    VendorSubmissionService --> Project

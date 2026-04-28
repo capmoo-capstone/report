@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor User as Internal User
+    participant Web as Web Application
+    participant API as Backend API
+    participant Auth as Identity and Access Service
+    participant LDAP as CU Net LDAP
+    participant DB as Application Database
+
+    User->>Web: Enter CU Net username and password
+    Web->>API: Submit login request
+    API->>Auth: Validate credentials
+    Auth->>LDAP: Bind with CU Net credentials
+    LDAP-->>Auth: Authentication result
+    alt Valid credentials
+        Auth->>DB: Load user, unit, role, and delegation
+        DB-->>Auth: Access profile
+        Auth-->>API: Issue access token
+        API-->>Web: Return token and profile
+        Web-->>User: Show authorized workspace
+    else Invalid credentials or inactive account
+        Auth-->>API: Reject login
+        API-->>Web: Return access denied
+        Web-->>User: Show error message
+    end

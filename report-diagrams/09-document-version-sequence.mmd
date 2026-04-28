@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    actor Staff as Staff or Head
+    participant Web as Web Application
+    participant API as Backend API
+    participant Doc as Document Service
+    participant Store as File Storage
+    participant DB as Application Database
+    participant Audit as Audit Log
+
+    Staff->>Web: Upload document for workflow step
+    Web->>API: Send file and metadata
+    API->>Doc: Validate project, step, and file type
+    Doc->>DB: Read latest document version
+    DB-->>Doc: Current version number
+    Doc->>Store: Store file binary
+    Store-->>Doc: File storage location
+    Doc->>DB: Create document version record
+    DB-->>Doc: Version saved
+    Doc->>Audit: Record uploader, timestamp, and action
+    Audit->>DB: Save audit log entry
+    DB-->>Audit: Audit saved
+    Doc-->>API: Upload result with version
+    API-->>Web: Return updated document list
+    Web-->>Staff: Show uploaded version

@@ -1,0 +1,30 @@
+flowchart TB
+    %% Deployment Diagram
+    classDef device fill:#eff6ff,stroke:#2563eb,color:#0f172a;
+    classDef node fill:#ecfdf5,stroke:#047857,color:#0f172a;
+    classDef storage fill:#fefce8,stroke:#ca8a04,color:#0f172a;
+    classDef external fill:#f8fafc,stroke:#64748b,color:#0f172a;
+
+    subgraph Client["Client Devices"]
+        InternalBrowser["Internal user browser"]:::device
+        VendorBrowser["Vendor browser"]:::device
+    end
+
+    subgraph AppServer["Application Server"]
+        StaticWeb["Static frontend"]:::node
+        ApiRuntime["Backend API runtime"]:::node
+    end
+
+    subgraph DataServer["Data Layer"]
+        Database[("Relational database")]:::storage
+        FileStorage[("Document file storage")]:::storage
+    end
+
+    LDAP["CU Net LDAP server"]:::external
+
+    InternalBrowser --> StaticWeb
+    VendorBrowser --> StaticWeb
+    StaticWeb --> ApiRuntime
+    ApiRuntime --> Database
+    ApiRuntime --> FileStorage
+    ApiRuntime --> LDAP

@@ -1,0 +1,40 @@
+flowchart TD
+    %% Job Assignment Activity
+    classDef action fill:#eff6ff,stroke:#2563eb,color:#0f172a;
+    classDef decision fill:#fef9c3,stroke:#ca8a04,color:#0f172a;
+    classDef state fill:#ecfdf5,stroke:#047857,color:#0f172a;
+
+    Start((Start))
+    Created["Project enters assignment pool"]:::state
+    Workload["Head or staff reviews workload distribution"]:::action
+    Method{"Assignment method"}:::decision
+
+    SelfPick["Staff selects job from pool"]:::action
+    SetOwner["Set staff as responsible person"]:::action
+    InProgress["Project status becomes In Progress"]:::state
+
+    ManualAssign["Head selects responsible staff"]:::action
+    Waiting["Project status becomes Waiting for Acceptance"]:::state
+    Accept{"Staff accepts assignment?"}:::decision
+    Confirm["Confirm assignment"]:::action
+    Decline["Keep job in pool or select another staff"]:::action
+
+    ChangeNeed{"Need to change assignee before acceptance?"}:::decision
+    ChangeOwner["Head replaces responsible staff"]:::action
+
+    AddNeed{"Need second assignee during work?"}:::decision
+    AddOwner["Head or current responsible staff adds second assignee"]:::action
+    Limit["Enforce maximum two assignees per work period"]:::action
+
+    End((End))
+
+    Start --> Created --> Workload --> Method
+    Method -- "Self-pick" --> SelfPick --> SetOwner --> InProgress
+    Method -- "Manual assignment" --> ManualAssign --> Waiting --> ChangeNeed
+    ChangeNeed -- "Yes" --> ChangeOwner --> Waiting
+    ChangeNeed -- "No" --> Accept
+    Accept -- "Yes" --> Confirm --> InProgress
+    Accept -- "No" --> Decline --> Workload
+    InProgress --> AddNeed
+    AddNeed -- "Yes" --> AddOwner --> Limit --> End
+    AddNeed -- "No" --> End

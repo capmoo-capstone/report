@@ -1,0 +1,104 @@
+flowchart LR
+    %% Nexus Procure MVP - Use Case Diagram
+    classDef actor fill:#ffffff,stroke:#334155,stroke-width:1.5px,color:#0f172a;
+    classDef usecase fill:#eff6ff,stroke:#2563eb,stroke-width:1.4px,color:#0f172a;
+    classDef group fill:#fffde7,stroke:#d6c94f,stroke-width:1px,color:#0f172a;
+
+    Admin["Admin"]:::actor
+    UnitRep["Unit Representative"]:::actor
+    Staff["Procurement Staff"]:::actor
+    Head["Head"]:::actor
+    Director["Director"]:::actor
+    Vendor["Vendor"]:::actor
+
+    subgraph System["Nexus Procure MVP"]
+        direction TB
+
+        subgraph AdminCases["Admin Use Cases"]
+            direction TB
+            A1(["Login with CU Net"]):::usecase
+            A2(["Manage users, roles, and units"]):::usecase
+            A3(["Configure delegation"]):::usecase
+        end
+
+        subgraph UnitCases["Unit Representative Use Cases"]
+            direction TB
+            U1(["Login with CU Net"]):::usecase
+            U2(["Import budget plan"]):::usecase
+            U3(["Create project"]):::usecase
+            U4(["Bulk import projects"]):::usecase
+            U5(["Track project timeline"]):::usecase
+        end
+
+        subgraph StaffCases["Procurement Staff Use Cases"]
+            direction TB
+            S1(["Login with CU Net"]):::usecase
+            S2(["View assignment pool"]):::usecase
+            S3(["Self-pick job"]):::usecase
+            S4(["Confirm assigned job"]):::usecase
+            S5(["Change or add assignee"]):::usecase
+            S6(["View workload distribution"]):::usecase
+            S7(["Update procurement workflow"]):::usecase
+            S8(["Upload and version documents"]):::usecase
+            S9(["Generate or cancel contract number"]):::usecase
+            S10(["Record asset code check"]):::usecase
+            S11(["Request cancellation"]):::usecase
+        end
+
+        subgraph HeadCases["Head Use Cases"]
+            direction TB
+            H1(["Login with CU Net"]):::usecase
+            H2(["Assign job"]):::usecase
+            H3(["Change or add assignee"]):::usecase
+            H4(["View workload distribution"]):::usecase
+            H5(["Return job for correction"]):::usecase
+            H6(["Review executive summary"]):::usecase
+            H7(["Approve cancellation"]):::usecase
+        end
+
+        subgraph DirectorCases["Director Use Cases"]
+            direction TB
+            D1(["Login with CU Net"]):::usecase
+            D2(["Review executive summary"]):::usecase
+        end
+
+        subgraph VendorCases["Vendor Use Cases"]
+            direction TB
+            V1(["Submit delivery documents"]):::usecase
+        end
+    end
+
+    Admin --> A1
+    Admin --> A2
+    Admin --> A3
+
+    UnitRep --> U1
+    UnitRep --> U2
+    UnitRep --> U3
+    UnitRep --> U4
+    UnitRep --> U5
+
+    Staff --> S1
+    Staff --> S2
+    Staff --> S3
+    Staff --> S4
+    Staff --> S5
+    Staff --> S6
+    Staff --> S7
+    Staff --> S8
+    Staff --> S9
+    Staff --> S10
+    Staff --> S11
+
+    Head --> H1
+    Head --> H2
+    Head --> H3
+    Head --> H4
+    Head --> H5
+    Head --> H6
+    Head --> H7
+
+    Director --> D1
+    Director --> D2
+
+    Vendor --> V1

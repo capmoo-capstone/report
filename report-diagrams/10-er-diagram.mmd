@@ -1,0 +1,136 @@
+erDiagram
+    UNIT ||--o{ USER : contains
+    ROLE ||--o{ USER : grants
+    USER ||--o{ DELEGATION : delegates_from
+    USER ||--o{ DELEGATION : delegates_to
+    UNIT ||--o{ BUDGET_PLAN : owns
+    UNIT ||--o{ PROJECT : requests
+    USER ||--o{ PROJECT : creates
+    PROJECT ||--o{ PROJECT_BUDGET_PLAN : links
+    BUDGET_PLAN ||--o{ PROJECT_BUDGET_PLAN : selected_for
+    PROJECT ||--o{ ASSIGNMENT : has
+    USER ||--o{ ASSIGNMENT : responsible_for
+    PROJECT ||--o{ WORKFLOW_STEP : contains
+    WORKFLOW_STEP ||--o{ DOCUMENT : requires
+    DOCUMENT ||--o{ DOCUMENT_VERSION : versions
+    USER ||--o{ DOCUMENT_VERSION : uploads
+    PROJECT ||--o| CONTRACT_NUMBER : receives
+    PROJECT ||--o| ASSET_RECORD : checks
+    PROJECT ||--o{ CANCELLATION_REQUEST : may_have
+    USER ||--o{ CANCELLATION_REQUEST : requests
+    PROJECT ||--o{ AUDIT_LOG : records
+    USER ||--o{ AUDIT_LOG : performs
+    PROJECT ||--o{ VENDOR_SUBMISSION : receives
+
+    UNIT {
+        string id PK
+        string name
+        string code
+    }
+    ROLE {
+        string id PK
+        string name
+    }
+    USER {
+        string id PK
+        string username
+        string display_name
+        string unit_id FK
+        string role_id FK
+        boolean active
+    }
+    DELEGATION {
+        string id PK
+        string from_user_id FK
+        string to_user_id FK
+        date start_date
+        date end_date
+        string scope
+    }
+    BUDGET_PLAN {
+        string id PK
+        string unit_id FK
+        string item_name
+        decimal budget_amount
+        string status
+    }
+    PROJECT {
+        string id PK
+        string receive_no
+        string legacy_ref_no
+        string title
+        decimal budget_amount
+        string urgency
+        string status
+        string unit_id FK
+        string created_by FK
+    }
+    PROJECT_BUDGET_PLAN {
+        string project_id FK
+        string budget_plan_id FK
+    }
+    ASSIGNMENT {
+        string id PK
+        string project_id FK
+        string user_id FK
+        string status
+        date assigned_at
+        date accepted_at
+    }
+    WORKFLOW_STEP {
+        string id PK
+        string project_id FK
+        string step_name
+        string status
+        int sequence_no
+    }
+    DOCUMENT {
+        string id PK
+        string workflow_step_id FK
+        string document_type
+        string description
+    }
+    DOCUMENT_VERSION {
+        string id PK
+        string document_id FK
+        int version_no
+        string file_path
+        string uploaded_by FK
+        datetime uploaded_at
+    }
+    CONTRACT_NUMBER {
+        string id PK
+        string project_id FK
+        string department_code
+        int running_no
+        int fiscal_year
+        string cancel_reason
+    }
+    ASSET_RECORD {
+        string id PK
+        string project_id FK
+        boolean has_asset_code
+        string asset_code
+    }
+    CANCELLATION_REQUEST {
+        string id PK
+        string project_id FK
+        string requested_by FK
+        string reason
+        string status
+    }
+    AUDIT_LOG {
+        string id PK
+        string project_id FK
+        string actor_user_id FK
+        string action
+        datetime system_timestamp
+        date manual_date
+    }
+    VENDOR_SUBMISSION {
+        string id PK
+        string project_id FK
+        string po_number
+        string file_path
+        datetime submitted_at
+    }
