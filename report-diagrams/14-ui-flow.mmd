@@ -25,16 +25,11 @@ flowchart TD
     ContractNumber["Contract Number"]:::screen
     Cancellation["Cancellation Review"]:::screen
 
-    VendorEntry["Vendor PO Lookup"]:::external
-    VendorSubmit["Vendor Delivery Submission"]:::external
-
     Login --> Role
     Role -- "Admin" --> AdminUsers --> AdminUnits --> AdminDelegation
-    Role -- "Unit Representative" --> ProjectList
+    Role -- "Representative" --> ProjectList
     Role -- "Staff" --> AssignmentPool
     Role -- "Head" --> AssignmentPool
-    Role -- "Director" --> ExecutiveSummary
-    Role -- "Vendor" --> VendorEntry
 
     ProjectList --> CreateProject
     ProjectList --> ImportPlan
@@ -50,4 +45,3 @@ flowchart TD
     WorkflowSteps --> ContractNumber
     WorkflowSteps --> Cancellation
     ProjectDetail --> ExecutiveSummary
-    VendorEntry --> VendorSubmit

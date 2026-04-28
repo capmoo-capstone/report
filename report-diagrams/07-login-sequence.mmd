@@ -3,24 +3,21 @@ sequenceDiagram
     actor User as Internal User
     participant Web as Web Application
     participant API as Backend API
-    participant Auth as Identity and Access Service
-    participant OAuth as OAuth Provider
+    participant Auth as Auth Service
     participant DB as Application Database
 
-    User->>Web: Click Login
-    Web->>OAuth: Redirect to OAuth login page
-    OAuth-->>User: Show login form
-    User->>OAuth: Enter credentials
+    User->>Web: Enter Username & Password
+    Web->>API: Send login credentials
+    API->>Auth: Validate credentials
+    Auth->>DB: Query user and roles
+    DB-->>Auth: Return user data
     alt Valid credentials
-        OAuth-->>Web: Return authorization code
-        Web->>API: Exchange code for token
-        API->>Auth: Validate and resolve user identity
-        Auth->>DB: Load user, unit, role, and delegation
-        DB-->>Auth: Access profile
-        Auth-->>API: Issue access token with roles
-        API-->>Web: Return token and profile
-        Web-->>User: Show authorized workspace
-    else Invalid credentials or inactive account
-        OAuth-->>Web: Return access denied
+        Auth->>Auth: Generate JWT Token
+        Auth-->>API: Return Token & User Profile
+        API-->>Web: Return Token & User Profile
+        Web-->>User: Redirect to Dashboard
+    else Invalid credentials
+        Auth-->>API: Throw Unauthorized Error
+        API-->>Web: Return 401 Error
         Web-->>User: Show error message
     end

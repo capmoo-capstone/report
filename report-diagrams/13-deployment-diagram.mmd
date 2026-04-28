@@ -7,7 +7,6 @@ flowchart TB
 
     subgraph Client["Client Devices"]
         InternalBrowser["Internal user browser"]:::device
-        VendorBrowser["Vendor browser"]:::device
     end
 
     subgraph AppServer["Application Server"]
@@ -16,15 +15,11 @@ flowchart TB
     end
 
     subgraph DataServer["Data Layer"]
-        Database[("Relational database")]:::storage
+        Database[("Relational database (PostgreSQL)")]:::storage
         FileStorage[("Document file storage")]:::storage
     end
 
-    LDAP["CU Net LDAP server"]:::external
-
     InternalBrowser --> StaticWeb
-    VendorBrowser --> StaticWeb
     StaticWeb --> ApiRuntime
     ApiRuntime --> Database
     ApiRuntime --> FileStorage
-    ApiRuntime --> LDAP
