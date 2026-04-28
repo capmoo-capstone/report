@@ -204,7 +204,12 @@ Discuss unexpected issues, anomalies, and what was learned.
 # Project Management and Teamwork (1 pages)
 
 ## Timeline & milestones
-Show progress made and key deliverables completed.
+| ช่วงการทำงาน | รายละเอียดสิ่งที่ส่งมอบ | ระยะเวลา |
+| :--- | :--- | :--- |
+| วางแผนและออกแบบเบื้องต้น | ผังสถาปัตยกรรมระบบ และเอกสาร Requirement | ธ.ค. 68 - ม.ค. 69 |
+| พัฒนาระบบให้สมบูรณ์ | ระบบ Back-end และ Front-end ที่สมบูรณ์ | ม.ค. 69 - พ.ค. 69 |
+| ทดสอบระบบ | แผนการทดสอบ และระบบที่ทดสอบเรียบร้อย | เม.ย. 69 - พ.ค. 69 |
+| ตรวจสอบงานก่อนส่งมอบ | เอกสารรายงานฉบับสมบูรณ์ | พ.ค. 69 |
 
 ## Work division
 การจัดสรรงานภายในทีมเป็นไปตามความสามารถและความถนัดของแต่ละบุคคล ดังนี้
