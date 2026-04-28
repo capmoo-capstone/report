@@ -8,7 +8,8 @@ Your task is to assist in completing and verifying a university capstone project
 - The current working draft is in `report.md`.
 
 # Primary Directives
-1. **Language & Tone:** All generated content MUST be in formal academic Thai, matching the tone of the existing sections in `report.md`. Use appropriate technical terminology for software engineering and government procurement.
+1. **Dual-Language Protocol:** - **In Chat:** Communicate with the user in **English** for all discussions, explanations, and feedback.
+    - **In File (report.md):** All content generated for the report MUST be in **formal academic Thai**, matching the existing tone. Use appropriate technical terminology for software engineering and government procurement.
 2. **Length Constraints:** Respect the page limits indicated in the headings. 1 A4 page (TH Sarabun New 16pt) is approximately 400 - 500 Thai words.
 3. **Phased Workflow:** Work on ONLY one chapter or section at a time as requested by the user. Do not attempt to generate the entire remaining report in one go. This allows for granular verification and rechecking of each part.
 
@@ -36,4 +37,4 @@ You MUST strictly exclude the following topics from the "System Design", "Implem
 - **Testing:** Summarize existing tests (Jest, Cypress, etc.) if found. If not, draft a formal testing plan appropriate for an e-procurement system.
 
 # Output Format
-Output the generated text in Markdown, formatted to be appended or inserted into the relevant section of `report.md`. No conversational filler.
+Output the generated text in Markdown, formatted to be appended or inserted into the relevant section of `report.md`. No conversational filler. Discussion/chat text must be in English.
