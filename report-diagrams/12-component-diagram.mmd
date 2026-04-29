@@ -14,13 +14,10 @@ flowchart LR
 
     subgraph Backend["Backend API"]
         Auth["Auth Service"]:::service
-        UserUnit["User, Role, Unit Service"]:::service
-        Project["Project Service"]:::service
+        BackOffice["Back Office Management"]:::service
         Assignment["Assignment Service"]:::service
         Workflow["Workflow Service"]:::service
-        Document["Document Service"]:::service
-        Contract["Contract Service"]:::service
-        VendorSvc["Vendor Submission Service"]:::service
+        Submission["Submission Service"]:::service
         Audit["Audit Log Service"]:::service
     end
 
@@ -30,27 +27,20 @@ flowchart LR
     Browser --> WebApp
     Browser --> VendorPage
     WebApp --> Auth
-    WebApp --> UserUnit
-    WebApp --> Project
+    WebApp --> BackOffice
     WebApp --> Assignment
     WebApp --> Workflow
-    WebApp --> Document
-    WebApp --> Contract
-    VendorPage --> VendorSvc
+    WebApp --> Submission
     Auth --> DB
-    UserUnit --> DB
-    Project --> DB
+    BackOffice --> DB
     Assignment --> DB
     Workflow --> DB
-    Contract --> DB
-    VendorSvc --> DB
-    Document --> DB
-    Document --> Files
+    Submission --> DB
+    Submission --> Files
     Audit --> DB
     Auth --> Audit
-    Project --> Audit
     Assignment --> Audit
     Workflow --> Audit
-    Document --> Audit
-    Contract --> Audit
-    VendorSvc --> Audit
+    Submission --> Audit
+    VendorPage --> Submission
+    BackOffice --> Audit

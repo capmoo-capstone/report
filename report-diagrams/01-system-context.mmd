@@ -7,19 +7,21 @@ flowchart LR
 
     Admin["Admin"]:::actor
     UnitRep["Unit Representative"]:::actor
-    Staff["Procurement Staff"]:::actor
-    Head["Head"]:::actor
-    Director["Director"]:::actor
+    Staff["Staff"]:::actor
+    Head["Head of Unit"]:::actor
+    Director["Head of Department"]:::actor
+    Guest["Guest"]:::actor
     Vendor["Vendor"]:::actor
 
     subgraph Boundary["Nexus Procure MVP"]
         App["Web Application"]:::system
         API["Backend API"]:::system
-        Auth["Identity and Access"]:::system
-        Project["Project and Assignment"]:::system
-        Workflow["Procurement Workflow"]:::system
-        Documents["Document Management"]:::system
+        Auth["Authentication & Authorization"]:::system
+        Assignment["Project Assignment"]:::system
+        Workflow["Project Workflow"]:::system
+        Submission["Submission System"]:::system
         VendorPortal["Vendor Portal"]:::system
+        BackOffice["Back Office Management"]:::system
     end
 
     DB[("Application Database")]:::storage
@@ -30,13 +32,21 @@ flowchart LR
     Staff --> App
     Head --> App
     Director --> App
+    Guest --> App
     Vendor --> VendorPortal
 
     App --> API
     VendorPortal --> API
     API --> Auth
-    API --> Project
+    API --> Assignment
     API --> Workflow
-    API --> Documents
-    API --> DB
-    Documents --> FileStore
+    API --> Submission
+    API --> BackOffice
+
+    Auth --> DB
+    Assignment --> DB
+    Workflow --> DB
+    BackOffice --> DB
+    Submission --> DB
+
+    Submission --> FileStore

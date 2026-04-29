@@ -6,52 +6,67 @@ flowchart LR
 
     Admin["Admin"]:::actor
     UnitRep["Representative"]:::actor
-    Staff["General / Finance Staff"]:::actor
+    Staff["General Staff"]:::actor
+    FinStaff["Finance Staff"]:::actor
     DocStaff["Document Staff"]:::actor
-    Head["Head of Unit / Dept"]:::actor
+    UHead["Head of Unit"]:::actor
+    DHead["Head of Dept"]:::actor
 
     subgraph System["Nexus Procure MVP"]
         direction TB
 
         subgraph AdminCases["Admin Use Cases"]
             direction TB
-            A1(["Manage users, roles, and units"]):::usecase
+            A1(["Manage Back Office Data"]):::usecase
             A2(["Configure delegation"]):::usecase
             A3(["Import budget plan"]):::usecase
         end
 
         subgraph UnitCases["Representative Use Cases"]
             direction TB
-            U1(["Create project request"]):::usecase
-            U2(["Track project timeline"]):::usecase
+            U1(["Create project"]):::usecase
+            U2(["View project timeline"]):::usecase
         end
 
         subgraph DocStaffCases["Document Staff Use Cases"]
             direction TB
-            DS1(["Create project (Manual / Bulk)"]):::usecase
+            DS1(["Create project (Manual/Bulk)"]):::usecase
             DS2(["Propose submission for signature"]):::usecase
             DS3(["Sign and complete submission"]):::usecase
         end
 
-        subgraph StaffCases["General / Finance Staff Use Cases"]
+        subgraph StaffCases["General Staff Use Cases"]
             direction TB
-            S1(["View assignment pool"]):::usecase
-            S2(["Self-pick job"]):::usecase
-            S3(["Confirm assigned job"]):::usecase
-            S4(["Update project workflow"]):::usecase
-            S5(["Upload and version documents"]):::usecase
-            S6(["Request cancellation"]):::usecase
-            S7(["Complete procurement / contract phase"]):::usecase
+            GS1(["View assignment pool"]):::usecase
+            GS2(["Self-pick job"]):::usecase
+            GS3(["Confirm assigned job"]):::usecase
+            GS4(["Update project workflow"]):::usecase
+            GS5(["Upload and version documents"]):::usecase
+            GS6(["Request cancellation"]):::usecase
+            GS7(["Complete procurement / contract phase"]):::usecase
         end
 
-        subgraph HeadCases["Head Use Cases"]
+        subgraph FinanceCases["Finance Staff Use Cases"]
             direction TB
-            H1(["Assign job"]):::usecase
-            H2(["Change or add assignee"]):::usecase
-            H3(["View workload distribution"]):::usecase
-            H4(["Return job for correction"]):::usecase
-            H5(["Approve submission"]):::usecase
-            H6(["Approve or reject cancellation"]):::usecase
+            FS1(["Send bill submission form"]):::usecase
+            FS2(["Submit to Finance Dept"]):::usecase
+            FS3(["Close Project"]):::usecase
+        end                       
+
+        subgraph UHeadCases["Head of Unit Use Cases"]
+            direction TB
+            UH1(["Assign job"]):::usecase
+            UH2(["Change or add assignee"]):::usecase
+            UH3(["View workload distribution"]):::usecase
+            UH4(["Return job for correction"]):::usecase
+            UH5(["Approve submission"]):::usecase
+            UH6(["Approve or reject cancellation"]):::usecase
+        end
+
+        subgraph DHeadCases["Head of Dept Use Cases"]
+            direction TB
+            DH1(["View workload distribution"]):::usecase
+            DH2(["Approve or reject cancellation"]):::usecase
         end
     end
 
@@ -66,17 +81,24 @@ flowchart LR
     DocStaff --> DS2
     DocStaff --> DS3
 
-    Staff --> S1
-    Staff --> S2
-    Staff --> S3
-    Staff --> S4
-    Staff --> S5
-    Staff --> S6
-    Staff --> S7
+    Staff --> GS1
+    Staff --> GS2
+    Staff --> GS3
+    Staff --> GS4
+    Staff --> GS5
+    Staff --> GS6
+    Staff --> GS7
 
-    Head --> H1
-    Head --> H2
-    Head --> H3
-    Head --> H4
-    Head --> H5
-    Head --> H6
+    FinStaff --> FS1
+    FinStaff --> FS2
+    FinStaff --> FS3
+
+    UHead --> UH1
+    UHead --> UH2
+    UHead --> UH3
+    UHead --> UH4
+    UHead --> UH5
+    UHead --> UH6
+
+    DHead --> DH1
+    DHead --> DH2
