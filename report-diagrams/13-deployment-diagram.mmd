@@ -15,8 +15,8 @@ flowchart TB
     end
 
     subgraph DataServer["Data Layer"]
-        Database[("Relational database (PostgreSQL)")]:::storage
-        FileStorage[("Document file storage")]:::storage
+        Database[("Application Database")]:::storage
+        FileStorage[("File Storage")]:::storage
     end
 
     InternalBrowser --> StaticWeb

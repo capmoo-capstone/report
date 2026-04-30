@@ -8,7 +8,7 @@ stateDiagram-v2
     WAITING_ACCEPT --> IN_PROGRESS: staff accepts assignment
 
 
-    IN_PROGRESS --> UNASSIGNED: staff returns project to pool\nor general staff completes procurement phase
+    IN_PROGRESS --> UNASSIGNED: staff returns project to pool or general staff completes procurement phase
 
     IN_PROGRESS --> WAITING_CANCEL: any staff requests cancellation
     WAITING_CANCEL --> CANCELLED: head approves cancellation
@@ -17,7 +17,7 @@ stateDiagram-v2
     UNASSIGNED --> WAITING_CANCEL: cancellation requested while unassigned
     WAITING_ACCEPT --> WAITING_CANCEL: cancellation requested while waiting
 
-    IN_PROGRESS --> CLOSED: finance staff closes project\nafter financial process completes
+    IN_PROGRESS --> CLOSED: finance staff closes project after financial process completes
 
     CLOSED --> REQUEST_EDIT: finance staff marks project for edit
     REQUEST_EDIT --> CLOSED: finance staff closes project again

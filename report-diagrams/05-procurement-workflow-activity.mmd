@@ -7,46 +7,46 @@ flowchart TD
     classDef finance fill:#fdf4ff,stroke:#9333ea,color:#0f172a;
 
     Start((Start))
-    ProcPhase["=== PROCUREMENT PHASE ===\nGeneral Staff assigned to project"]:::state
-    Work["General Staff completes current step\nfill required fields and upload documents"]:::action
-    ApproveReq{"Step requires\napproval?"}:::decision
+    ProcPhase["=== PROCUREMENT PHASE === General Staff assigned to project"]:::state
+    Work["General Staff completes current step fill required fields and upload documents"]:::action
+    ApproveReq{"Step requires approval?"}:::decision
     HeadApprove["Head of Unit reviews and approves step"]:::action
     Rejected{"Head rejects?"}:::decision
-    SigReq{"Step requires\nsignature?"}:::decision
+    SigReq{"Step requires signature?"}:::decision
     DocPropose["Document Staff marks step as Proposed"]:::action
     HeadSign["Head of Department signs outside the app"]:::action
     DocSign["Document Staff marks step as Signed"]:::action
     StepDone["Step completed"]:::action
-    MoreSteps{"More procurement\nsteps remaining?"}:::decision
+    MoreSteps{"More procurement steps remaining?"}:::decision
 
     ProcDone["All procurement steps completed"]:::state
-    NextPhaseChoice{"General Staff chooses\nnext action"}:::decision
-    ReturnPool["Return project to assignment pool\nfor contract unit"]:::action
-    AssignContract["Assign project to General Staff\nin Contract Unit"]:::action
+    NextPhaseChoice{"General Staff chooses next action"}:::decision
+    ReturnPool["Return project to assignment pool for contract unit"]:::action
+    AssignContract["Assign project to General Staff in Contract Unit"]:::action
     WaitAccept["Project status: WAITING_ACCEPT"]:::state
 
-    ContPhase["=== CONTRACT PHASE ===\nContract General Staff works on steps"]:::state
+    ContPhase["=== CONTRACT PHASE === Contract General Staff works on steps"]:::state
     ContWork["General Staff completes current contract step"]:::action
-    ContApproveReq{"Step requires\napproval?"}:::decision
+    ContApproveReq{"Step requires approval?"}:::decision
     ContHeadApprove["Head of Unit reviews and approves step"]:::action
     ContRejected{"Head rejects?"}:::decision
-    ContSigReq{"Step requires\nsignature?"}:::decision
+    ContSigReq{"Step requires signature?"}:::decision
     ContDocPropose["Document Staff marks step as Proposed"]:::action
     ContHeadSign["Head of Department signs outside the app"]:::action
     ContDocSign["Document Staff marks step as Signed"]:::action
     ContStepDone["Step completed"]:::action
-    ContMoreSteps{"More contract\nsteps remaining?"}:::decision
+    ContMoreSteps{"More contract steps remaining?"}:::decision
 
     ContDone["All contract steps completed"]:::state
     FinanceExport["Finance Staff exports project"]:::finance
-    FinanceClose["Finance Staff closes project after\nfinancial process completes outside the app"]:::finance
+    FinanceClose["Finance Staff closes project after financial process completes outside the app"]:::finance
     Closed["Project status: CLOSED"]:::state
 
-    RequestEdit{"Finance Staff marks\nproject as REQUEST_EDIT?"}:::decision
+    RequestEdit{"Finance Staff marks project as REQUEST_EDIT?"}:::decision
     EditDetails["Edit project financial details"]:::action
     CloseAgain["Finance Staff closes project again"]:::finance
 
-    CancelCheck{"Cancellation\nrequested?"}:::decision
+    CancelCheck{"Cancellation requested?"}:::decision
     CancelReview["Head reviews cancellation reason"]:::action
     CancelApproved{"Approved?"}:::decision
     Cancelled["Project status: CANCELLED"]:::stop
