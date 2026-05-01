@@ -40,10 +40,9 @@ node .\render-all.cjs
 | 06 | Project Status State Machine | [06-project-status-state-machine.mmd](./06-project-status-state-machine.mmd) | [06-project-status-state-machine.png](./06-project-status-state-machine.png) |
 | 07 | Login Sequence | [07-login-sequence.mmd](./07-login-sequence.mmd) | [07-login-sequence.png](./07-login-sequence.png) |
 | 08 | Create Project Sequence | [08-create-project-sequence.mmd](./08-create-project-sequence.mmd) | [08-create-project-sequence.png](./08-create-project-sequence.png) |
-| 09 | Document Upload and Version Sequence | [09-document-version-sequence.mmd](./09-document-version-sequence.mmd) | [09-document-version-sequence.png](./09-document-version-sequence.png) |
+| 09 | Document Version Sequence | [09-document-version-sequence.mmd](./09-document-version-sequence.mmd) | [09-document-version-sequence.png](./09-document-version-sequence.png) |
 | 10 | ER Diagram | [10-er-diagram.mmd](./10-er-diagram.mmd) | [10-er-diagram.png](./10-er-diagram.png) |
 | 11 | Class Diagram | [11-class-diagram.mmd](./11-class-diagram.mmd) | [11-class-diagram.png](./11-class-diagram.png) |
 | 12 | Component Diagram | [12-component-diagram.mmd](./12-component-diagram.mmd) | [12-component-diagram.png](./12-component-diagram.png) |
 | 13 | Deployment Diagram | [13-deployment-diagram.mmd](./13-deployment-diagram.mmd) | [13-deployment-diagram.png](./13-deployment-diagram.png) |
 | 14 | UI Flow | [14-ui-flow.mmd](./14-ui-flow.mmd) | [14-ui-flow.png](./14-ui-flow.png) |
-| 18 | Vendor Submission Sequence | [18-vendor-submission-sequence.mmd](./18-vendor-submission-sequence.mmd) | [18-vendor-submission-sequence.png](./18-vendor-submission-sequence.png) |
