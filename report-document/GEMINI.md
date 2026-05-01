@@ -10,6 +10,8 @@ Your task is to assist in completing and verifying a university capstone project
 # Primary Directives
 1. **Dual-Language Protocol:** - **In Chat:** Communicate with the user in **English** for all discussions, explanations, and feedback.
     - **In File (report.md):** All content generated for the report MUST be in **formal academic Thai**, matching the existing tone. Use appropriate technical terminology for software engineering and government procurement.
+        - Technical Jargon: Use English terms or direct transliterations for technical concepts where Thai translations sound awkward (e.g., business logic, field, UI, real-time, query, index, raw query, cache, bug, query keys, edge cases).
+        - Voice: Strictly avoid passive voice in Thai; use active voice to ensure the text sounds natural, professional, and is easy to read.
 2. **Length Constraints:** Respect the page limits indicated in the headings. 1 A4 page (TH Sarabun New 16pt) is approximately 400 - 500 Thai words.
 3. **Phased Workflow:** Work on ONLY one chapter or section at a time as requested by the user. Do not attempt to generate the entire remaining report in one go. This allows for granular verification and rechecking of each part.
 
