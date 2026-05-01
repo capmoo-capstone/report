@@ -1,25 +1,43 @@
 sequenceDiagram
-    autonumber
-    actor Staff as Staff or Head
-    participant Web as Web Application
+    actor User as Staff or Head
+    participant UI as Web Application
     participant API as Backend API
-    participant Doc as Document Service
-    participant Store as File Storage
+    participant Auth as Access Control
+    participant Workflow as Workflow Service
+    participant Document as Document Service
+    participant Storage as File Storage
     participant DB as Application Database
     participant Audit as Audit Log
 
-    Staff->>Web: Upload document for workflow step
-    Web->>API: Send file and metadata
-    API->>Doc: Validate project, step, and file type
-    Doc->>DB: Read latest document version
-    DB-->>Doc: Current version number
-    Doc->>Store: Store file binary
-    Store-->>Doc: File storage location
-    Doc->>DB: Create document version record
-    DB-->>Doc: Version saved
-    Doc->>Audit: Record uploader, timestamp, and action
-    Audit->>DB: Save audit log entry
-    DB-->>Audit: Audit saved
-    Doc-->>API: Upload result with version
-    API-->>Web: Return updated document list
-    Web-->>Staff: Show uploaded version
+    User->>UI: 1. Select project step and upload file
+    UI->>API: 2. Submit document file and metadata
+    API->>Auth: 3. Verify user permission for project and step
+    Auth-->>API: 4. Return permission result
+
+    alt Permission denied
+        API-->>UI: 5A. Return access denied
+        UI-->>User: 6A. Show permission error
+    else Permission granted
+        API->>Workflow: 5B. Check project status and step upload rules
+        Workflow-->>API: 6B. Return step upload result
+        API->>Document: 7B. Validate file type, size, and metadata
+
+        alt Invalid file
+            Document-->>API: 8C. Return validation error
+            API-->>UI: 9C. Return validation message
+            UI-->>User: 10C. Show upload error
+        else Valid file
+            Document->>DB: 8D. Read latest document version
+            DB-->>Document: 9D. Return latest version number
+            Document->>Storage: 10D. Save file binary
+            Storage-->>Document: 11D. Return stored file path
+            Document->>DB: 12D. Create document version record
+            DB-->>Document: 13D. Confirm version saved
+            Document->>Audit: 14D. Record upload action and system timestamp
+            Audit->>DB: 15D. Save audit log entry
+            DB-->>Audit: 16D. Confirm audit saved
+            Document-->>API: 17D. Return new document version
+            API-->>UI: 18D. Return updated document list
+            UI-->>User: 19D. Show uploaded document version
+        end
+    end
