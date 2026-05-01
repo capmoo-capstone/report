@@ -1,6 +1,21 @@
-# บทคัดย่อ (ภาษาไทย)
+# Abstract (Thai)
+โครงงานนี้มีชื่อว่า ระบบบริหารจัดการและติดตามงานพัสดุ มุ่งเน้นการแก้ปัญหา ความล่าช้าและปัญหาคอขวดในการติดตามสถานะกระบวนการจัดซื้อจัดจ้าง ซึ่งมีความสำคัญเนื่องจาก กระบวนการจัดซื้อจัดจ้างของมหาวิทยาลัยจำเป็นต้องมีความรวดเร็ว โปร่งใส และสามารถตรวจสอบย้อนหลังได้ วัตถุประสงค์ของโครงงานคือ เพื่อพัฒนาระบบสารสนเทศสำหรับติดตามและบริหารจัดการงานพัสดุ เพื่อตรวจสอบผู้รับผิดชอบและระยะเวลาในการปฏิบัติงานในแต่ละขั้นตอน และเพื่อลดข้อผิดพลาดและเพิ่มประสิทธิภาพในการประสานงานระหว่างส่วนงานต่าง ๆ
 
-# บทคัดย่อ (ภาษาอังกฤษ)
+แนวทางการแก้ปัญหาประกอบด้วย การนำสถาปัตยกรรมระบบคิวงานกลางและกระบวนการทำงานอัตโนมัติมาประยุกต์ใช้ โดยผสาน สถาปัตยกรรมแบบแยกส่วน การควบคุมสิทธิ์การเข้าถึงตามบทบาท และฐานข้อมูลเชิงสัมพันธ์ ระบบถูกพัฒนาโดยใช้ React, Node.js และ PostgreSQL และผ่านการทดสอบด้วย การประเมินความถูกต้องของการทำงานและการตรวจสอบสิทธิ์การเข้าถึงข้อมูลตามบทบาท
+
+ผลการดำเนินงานแสดงให้เห็นว่า ระบบสามารถเป็นศูนย์กลางในการติดตามสถานะโครงการและกระจายภาระงานได้อย่างเป็นธรรม โดยบรรลุ ความถูกต้องร้อยละ 100 ในกรณีทดสอบระดับวิกฤตที่เกี่ยวข้องกับการตรวจสอบสิทธิ์และการจัดการวงจรสถานะโครงการ โครงงานนี้มีส่วนช่วยต่อ การยกระดับการบริหารจัดการในองค์กร ผ่าน การเปลี่ยนกระบวนการทำงานที่พึ่งพากระดาษไปสู่รูปแบบดิจิทัลที่โปร่งใสและสามารถตรวจสอบย้อนหลังได้
+
+**คำสำคัญ**: ระบบจัดซื้อจัดจ้างอิเล็กทรอนิกส์, ระบบคิวงานกลาง, กระบวนการทำงานอัตโนมัติ, การควบคุมการเข้าถึงตามบทบาท, เว็บแอปพลิเคชัน
+
+# Abstract (English)
+
+This project, titled NexusProcure, addresses the problem of delays and bottlenecks in tracking the status of procurement processes, which is significant due to the necessity for university procurement to be efficient, transparent, and fully traceable. The objectives of this project are to develop an information system for tracking and managing procurement tasks, to monitor responsible personnel and execution time, and to reduce coordination errors.
+
+The proposed solution involves designing a centralized assignment pool and workflow automation, integrating a decoupled architecture, role-based access control, and a relational database. The system was implemented using React, Node.js, and PostgreSQL and evaluated through functional testing and access control security assessments.
+
+Results indicate that the system effectively serves as a centralized hub for tracking project statuses and fairly distributing workloads, achieving a 100% pass rate in critical test cases related to authorization and data integrity. The project contributes to organizational management enhancement by modernizing paper-based workflows into a fully digital, transparent, and verifiable ecosystem.
+
+**Keywords** : e-Procurement, Assignment Pool, Workflow Automation, Role-Based Access Control, Web Application
 
 # กิตติกรรมประกาศ
 TBC in MS Word
