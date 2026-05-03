@@ -7,10 +7,12 @@ flowchart TB
 
     subgraph Client["Client Devices"]
         InternalBrowser["Internal user browser"]:::device
+        VendorBrowser["Vendor browser"]:::device
     end
 
     subgraph AppServer["Application Server"]
-        StaticWeb["Static frontend"]:::node
+        StaticWeb["Internal static frontend"]:::node
+        VendorWeb["Vendor frontend (separate domain)"]:::node
         ApiRuntime["Backend API runtime"]:::node
     end
 
@@ -20,6 +22,8 @@ flowchart TB
     end
 
     InternalBrowser --> StaticWeb
+    VendorBrowser --> VendorWeb
     StaticWeb --> ApiRuntime
+    VendorWeb --> ApiRuntime
     ApiRuntime --> Database
     ApiRuntime --> FileStorage

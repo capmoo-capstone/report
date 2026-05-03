@@ -14,14 +14,22 @@ flowchart LR
     Vendor["Vendor"]:::actor
 
     subgraph Boundary["Nexus Procure MVP"]
-        App["Web Application"]:::system
-        API["Backend API"]:::system
-        Auth["Authentication & Authorization"]:::system
-        Assignment["Project Assignment"]:::system
-        Workflow["Project Workflow"]:::system
-        Submission["Submission System"]:::system
-        VendorPortal["Vendor Portal"]:::system
-        BackOffice["Back Office Management"]:::system
+        subgraph InternalDomain["Internal Web Domain"]
+            App["Web Application"]:::system
+        end
+
+        subgraph VendorDomain["Vendor Domain"]
+            VendorPortal["Vendor Portal"]:::system
+        end
+
+        subgraph SharedServices["Shared Backend Services"]
+            API["Backend API"]:::system
+            Auth["Authentication & Authorization"]:::system
+            Assignment["Project Assignment"]:::system
+            Workflow["Project Workflow"]:::system
+            Submission["Submission System"]:::system
+            BackOffice["Back Office Management"]:::system
+        end
     end
 
     DB[("Application Database")]:::storage
