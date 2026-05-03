@@ -2,46 +2,74 @@ flowchart TD
     %% UI Flow Diagram
     classDef screen fill:#eff6ff,stroke:#2563eb,color:#0f172a;
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#0f172a;
-    classDef external fill:#f8fafc,stroke:#64748b,color:#0f172a;
 
-    Login["Login"]:::screen
-    Role{"User role"}:::decision
+    Login["Login Page"]:::screen
+    Role{"Check User Role"}:::decision
 
-    AdminUsers["Admin: User and Role Management"]:::screen
-    AdminUnits["Admin: Unit Configuration"]:::screen
-    AdminDelegation["Admin: Delegation Configuration"]:::screen
+    %% Admin Screens
+    AdminSettings["Admin: Settings & Roles Management"]:::screen
+    AdminAudit["Admin / Head of Dept: Audit Logs View"]:::screen
+    AdminBudget["Admin: Budget Plan Import"]:::screen
 
-    ProjectList["Project List"]:::screen
-    CreateProject["Create Project"]:::screen
-    ImportPlan["Import Budget Plan"]:::screen
-    BulkImport["Bulk Project Import"]:::screen
-    AssignmentPool["Assignment Pool"]:::screen
-    WorkloadView["Workload Distribution View"]:::screen
-    MyTasks["My Tasks"]:::screen
-    ProjectDetail["Project Detail"]:::screen
-    WorkflowSteps["Workflow Steps"]:::screen
-    DocumentUpload["Document Upload and Versions"]:::screen
-    ExecutiveSummary["Executive Summary"]:::screen
-    ContractNumber["Contract Number"]:::screen
-    Cancellation["Cancellation Review"]:::screen
+    %% Representative & Document Staff Shared
+    CreateProject["Create Project Request"]:::screen
+
+    %% Document Staff Screens
+    DocImport["Document Staff: Bulk Project Import"]:::screen
+
+    %% Finance Staff Screens
+    FinanceExport["Finance Staff: Finance Export"]:::screen
+    VendorResponse["Finance: View Vendor Responses"]:::screen
+
+    %% Staff & Head Screens
+    AssignPool["Staff / Head: Assignment Board"]:::screen
+
+    %% Shared Screens
+    ProjectList["All Users: Project List"]:::screen
+    ProjectDetail["All Users: Project Details & Timeline"]:::screen
+    MyDashboard["All Users (Except Rep.): My To-Do Dashboard"]:::screen
+    Workflow["Manage Submissions & Workflow"]:::screen
+    UploadDoc["Upload Documents"]:::screen
+    Contract["General (Except some unit): Manage Contract Number"]:::screen
+
+    %% Public Screen
+    VendorForm["Public: Vendor Submission Form"]:::screen
 
     Login --> Role
-    Role -- "Admin" --> AdminUsers --> AdminUnits --> AdminDelegation
-    Role -- "Representative" --> ProjectList
-    Role -- "Staff" --> AssignmentPool
-    Role -- "Head" --> AssignmentPool
 
-    ProjectList --> CreateProject
-    ProjectList --> ImportPlan
-    ProjectList --> BulkImport
+    %% Admin Path
+    Role -- "Admin" --> AdminSettings
+    Role -- "Admin" --> AdminAudit
+    Role -- "Admin" --> AdminBudget
+
+    %% Head Path
+    Role -- "Head of Dept / Unit" --> AssignPool
+    Role -- "Head of Dept" --> AdminAudit
+
+    %% Finance Staff Path
+    Role -- "Finance Staff" --> FinanceExport
+    Role -- "Finance Staff" --> VendorResponse
+
+    %% Document Staff Path
+    Role -- "Document Staff" --> DocImport
+    Role -- "Document Staff" --> CreateProject
+
+    %% General Staff Path
+    Role -- "General Staff" --> AssignPool
+
+    %% Representative Path
+    Role -- "Representative" --> CreateProject
+
+    %% Common Paths to Project List & Detail
+    Role --> ProjectList
+    Role --> MyDashboard
     ProjectList --> ProjectDetail
+    MyDashboard --> ProjectDetail
+    CreateProject --> ProjectDetail
+    DocImport --> ProjectDetail
+    AssignPool --> ProjectDetail
 
-    AssignmentPool --> WorkloadView
-    AssignmentPool --> MyTasks
-    AssignmentPool --> ProjectDetail
-    MyTasks --> ProjectDetail
-    ProjectDetail --> WorkflowSteps
-    WorkflowSteps --> DocumentUpload
-    WorkflowSteps --> ContractNumber
-    WorkflowSteps --> Cancellation
-    ProjectDetail --> ExecutiveSummary
+    %% Workflow details within Project Detail
+    ProjectDetail --> Workflow
+    Workflow --> UploadDoc
+    Workflow --> Contract
