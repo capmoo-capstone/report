@@ -22,6 +22,12 @@ Get-ChildItem . -Filter *.mmd | ForEach-Object {
 }
 ```
 
+```powershell
+Get-ChildItem . -Filter *.mmd | ForEach-Object {
+  npx -y @mermaid-js/mermaid-cli -i $_.FullName -o ($_.FullName -replace '\.mmd$', '.png') -b transparent -s 3
+}
+```
+
 This package also includes `render-all.cjs`, which was used to generate the PNGs on this machine:
 
 ```powershell
