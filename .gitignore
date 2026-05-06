@@ -5,3 +5,4 @@ node_modules/
 *.svg
 *.txt
 FR-*.md
+*.csv
