@@ -448,7 +448,7 @@ TBC in MS Word
 ระบบดังกล่าวจะมีส่วนช่วยอย่างมากในการสร้างความยั่งยืนด้านสิ่งแวดล้อม โดยการเปลี่ยนผ่านกระบวนการทำงานที่พึ่งพากระดาษ ไปสู่รูปแบบดิจิทัล ช่วยลดการใช้ทรัพยากรกระดาษ ลดปริมาณขยะ และลดการปล่อยก๊าซเรือนกระจกที่เกิดจากการเดินทางเพื่อจัดส่งเอกสารทางกายภาพระหว่างหน่วยงานภายในมหาวิทยาลัยได้อย่างมีนัยสำคัญ
 
 ## 8.4 สิทธิ์ในทรัพย์สินทางปัญญา
-สิทธิ์ในทรัพย์สินทางปัญญาของ source code ฐานข้อมูล และองค์ประกอบต่าง ๆ ของระบบ NexusProcure ถือเป็นกรรมสิทธิ์ร่วมกันระหว่างคณะผู้จัดทำ ภาควิชาวิศวกรรมคอมพิวเตอร์ และสำนักบริหารการเงิน การบัญชี และการพัสดุ (สบง.) จุฬาลงกรณ์มหาวิทยาลัย ในฐานะเจ้าของโครงการ ในส่วนของการนำเทคโนโลยีและเครื่องมือแบบ open-source หรือ third-party libraries มาใช้งาน คณะผู้จัดทำได้ปฏิบัติตามเงื่อนไขของสัญญาอนุญาต ที่เกี่ยวข้องอย่างเคร่งครัด เพื่อป้องกันการละเมิดลิขสิทธิ์
+สิทธิ์ในทรัพย์สินทางปัญญาของ source code ฐานข้อมูล และองค์ประกอบต่าง ๆ ของระบบ NexusProcure ถือเป็นลิขสิทธิ์ของสำนักบริหารการเงิน การบัญชี และการพัสดุ (สบง.) จุฬาลงกรณ์มหาวิทยาลัย ในฐานะผู้ว่าจ้างและเจ้าของโครงการแต่เพียงผู้เดียว ในส่วนของการนำเทคโนโลยีและเครื่องมือแบบ open-source หรือ third-party libraries มาใช้งาน คณะผู้จัดทำได้ปฏิบัติตามเงื่อนไขของสัญญาอนุญาต ที่เกี่ยวข้องอย่างเคร่งครัด เพื่อป้องกันการละเมิดลิขสิทธิ์
 
 # 9. ความเสี่ยงและการจัดการทรัพยากร (1 หน้า)
 
@@ -495,4 +495,4 @@ TBC in MS Word
 - [13]	M. Mikowski and J. Powell, Single Page Web Applications: JavaScript end-to-end, 1 ed. Manning, 2013, p. 432.
 - [14]	G. Myovela, H. Ng’elenge, and B. Kisawike, "Factors Affecting the Adoption of Electronic Procurement in the Public Sector: The Case of Songwe District Council," East African Journal of Business and Economics, vol. 6, no. 2, 2023/11/01, doi: 10.37284/eajbe.6.2.1547.
 - [15]	K. Ragin-Skorecka and Ł. Hadaś, "Sustainable E-Procurement: Key Factors Influencing User Satisfaction and Dissatisfaction," Sustainability, vol. 16, no. 13, p. 5649, 2024. [Online]. Available: https://www.mdpi.com/2071-1050/16/13/5649.
-- [16]	P. Trkman and K. McCormack, "Estimating the Benefits and Risks of Implementing E-Procurement," IEEE Transactions on Engineering Management, vol. 57, no. 2, pp. 338–349, 2010, doi: 10.1109/TEM.2009.2033046.338–349, 2010, doi: 10.1109/TEM.2009.2033046..338–349, 2010, doi: 10.1109/TEM.2009.2033046.2010, doi: 10.1109/TEM.2009.2033046.
+- [16]	P. Trkman and K. McCormack, "Estimating the Benefits and Risks of Implementing E-Procurement," IEEE Transactions on Engineering Management, vol. 57, no. 2, pp. 338–349, 2010, doi: 10.1109/TEM.2009.2033046.
