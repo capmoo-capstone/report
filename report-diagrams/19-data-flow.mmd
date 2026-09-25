@@ -1,0 +1,12 @@
+flowchart TD
+    A[("PostgreSQL Database")] --> B{"Authorization System"}
+    B -->|Executive Role| C["Fetch Organization Overview Data"]
+    B -->|Head Role| D["Fetch Workgroup Specific Data"]
+    B -->|Staff Role| E["Fetch Personal Assigned Data"]
+    
+    C --> F["KPI Calculation Module<br/>- Exclude Public Holidays<br/>- Calculate Lead Time<br/>- Analyze Overdue"]
+    D --> F
+    E --> F
+    
+    F --> G{"Time-based Data Filtering<br/>(Month/Quarter/Year)"}
+    G --> H["Display Statistical Graphs<br/>(Pie Chart / Stacked Bar)"]

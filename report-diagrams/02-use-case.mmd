@@ -44,6 +44,7 @@ flowchart LR
             GS5(["Upload and version documents"]):::usecase
             GS6(["Request cancellation"]):::usecase
             GS7(["Complete procurement / contract phase"]):::usecase
+            GS8(["View Personal KPI"]):::usecase
         end
 
         subgraph FinanceCases["Finance Staff Use Cases"]
@@ -61,12 +62,14 @@ flowchart LR
             UH4(["Return job for correction"]):::usecase
             UH5(["Approve submission"]):::usecase
             UH6(["Approve or reject cancellation"]):::usecase
+            UH7(["View Workgroup KPI"]):::usecase
         end
 
         subgraph DHeadCases["Head of Dept Use Cases"]
             direction TB
             DH1(["View workload distribution"]):::usecase
             DH2(["Approve or reject cancellation"]):::usecase
+            DH3(["View Executive Dashboard"]):::usecase
         end
     end
 
@@ -88,6 +91,7 @@ flowchart LR
     Staff --> GS5
     Staff --> GS6
     Staff --> GS7
+    Staff --> GS8
 
     FinStaff --> FS1
     FinStaff --> FS2
@@ -99,6 +103,8 @@ flowchart LR
     UHead --> UH4
     UHead --> UH5
     UHead --> UH6
+    UHead --> UH7
 
     DHead --> DH1
     DHead --> DH2
+    DHead --> DH3

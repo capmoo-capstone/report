@@ -19,6 +19,8 @@ flowchart LR
         Workflow["Workflow Service"]:::service
         Submission["Submission Service"]:::service
         Audit["Audit Log Service"]:::service
+        Dashboard["Dashboard & KPI Service"]:::service
+        Finance["Finance Export Service"]:::service
     end
 
     DB[("Database")]:::storage
@@ -31,12 +33,16 @@ flowchart LR
     WebApp --> Assignment
     WebApp --> Workflow
     WebApp --> Submission
+    WebApp --> Dashboard
+    WebApp --> Finance
     Auth --> DB
     BackOffice --> DB
     Assignment --> DB
     Workflow --> DB
     Submission --> DB
     Submission --> Files
+    Dashboard --> DB
+    Finance --> DB
     Audit --> DB
     Auth --> Audit
     Assignment --> Audit

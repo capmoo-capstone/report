@@ -1,4 +1,4 @@
-flowchart TD
+flowchart LR
     %% UI Flow Diagram
     classDef screen fill:#eff6ff,stroke:#2563eb,color:#0f172a;
     classDef decision fill:#fef9c3,stroke:#ca8a04,color:#0f172a;
@@ -20,6 +20,11 @@ flowchart TD
     %% Finance Staff Screens
     FinanceExport["Finance Staff: Finance Export"]:::screen
     VendorResponse["Finance: View Vendor Responses"]:::screen
+
+    %% Dashboards
+    ExecDashboard["Head of Dept: Executive Dashboard"]:::screen
+    UnitDashboard["Head of Unit: Workgroup KPI"]:::screen
+    StaffDashboard["Staff: Personal KPI"]:::screen
 
     %% Staff & Head Screens
     AssignPool["Staff / Head: Assignment Board"]:::screen
@@ -45,6 +50,8 @@ flowchart TD
     %% Head Path
     Role -- "Head of Dept / Unit" --> AssignPool
     Role -- "Head of Dept" --> AdminAudit
+    Role -- "Head of Dept" --> ExecDashboard
+    Role -- "Head of Unit" --> UnitDashboard
 
     %% Finance Staff Path
     Role -- "Finance Staff" --> FinanceExport
@@ -56,6 +63,7 @@ flowchart TD
 
     %% General Staff Path
     Role -- "General Staff" --> AssignPool
+    Role -- "General Staff" --> StaffDashboard
 
     %% Representative Path
     Role -- "Representative" --> CreateProject
