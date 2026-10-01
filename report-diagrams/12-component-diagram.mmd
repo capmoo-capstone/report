@@ -1,5 +1,5 @@
 flowchart LR
-    %% Component Diagram
+    %% NexusProcure - Component Diagram
     classDef ui fill:#eff6ff,stroke:#2563eb,color:#0f172a;
     classDef service fill:#ecfdf5,stroke:#047857,color:#0f172a;
     classDef external fill:#f8fafc,stroke:#64748b,color:#0f172a;
@@ -7,46 +7,60 @@ flowchart LR
 
     Browser["User Browser"]:::ui
 
-    subgraph Frontend["Frontend"]
-        WebApp["Nexus Procure Web App"]:::ui
+    subgraph Frontend["Frontend Application (React + Vite)"]
+        WebApp["Internal Procurement Portal"]:::ui
         VendorPage["Vendor Submission Page"]:::ui
     end
 
-    subgraph Backend["Backend API"]
-        Auth["Auth Service"]:::service
-        BackOffice["Back Office Management"]:::service
-        Assignment["Assignment Service"]:::service
-        Workflow["Workflow Service"]:::service
-        Submission["Submission Service"]:::service
-        Audit["Audit Log Service"]:::service
-        Dashboard["Dashboard & KPI Service"]:::service
-        Finance["Finance Export Service"]:::service
+    subgraph Backend["Backend API (Node.js + Express)"]
+        APIGateway["Express Router & Auth Middleware"]:::service
+        AuthService["Auth & SAML Service"]:::service
+        ProjectService["Project & Lifecycle Service"]:::service
+        AssignmentService["Project Assignment Service"]:::service
+        SubmissionService["Submission & Step Service"]:::service
+        StorageService["R2 Presigned Storage Service"]:::service
+        InstallmentService["Installment & Finance Export Service"]:::service
+        AdminService["User, Unit & Budget Management"]:::service
+        NotificationService["Notification & Outbox Service"]:::service
+        AuditService["Audit Event Logging Service"]:::service
+        KPIService["KPI & Analytics Dashboard Service"]:::service
     end
 
-    DB[("Database")]:::storage
-    Files[("File Storage")]:::storage
+    DB[("PostgreSQL (Prisma ORM)")]:::storage
+    R2Storage[("Cloudflare R2 Storage")]:::storage
 
     Browser --> WebApp
     Browser --> VendorPage
-    WebApp --> Auth
-    WebApp --> BackOffice
-    WebApp --> Assignment
-    WebApp --> Workflow
-    WebApp --> Submission
-    WebApp --> Dashboard
-    WebApp --> Finance
-    Auth --> DB
-    BackOffice --> DB
-    Assignment --> DB
-    Workflow --> DB
-    Submission --> DB
-    Submission --> Files
-    Dashboard --> DB
-    Finance --> DB
-    Audit --> DB
-    Auth --> Audit
-    Assignment --> Audit
-    Workflow --> Audit
-    Submission --> Audit
-    VendorPage --> Submission
-    BackOffice --> Audit
+
+    WebApp --> APIGateway
+    VendorPage --> APIGateway
+
+    APIGateway --> AuthService
+    APIGateway --> ProjectService
+    APIGateway --> AssignmentService
+    APIGateway --> SubmissionService
+    APIGateway --> StorageService
+    APIGateway --> InstallmentService
+    APIGateway --> AdminService
+    APIGateway --> NotificationService
+    APIGateway --> KPIService
+
+    StorageService -.->|Generate Presigned URL| WebApp
+    StorageService -.->|Generate Presigned URL| VendorPage
+    Browser -.->|Upload/Download| R2Storage
+
+    AuthService --> DB
+    ProjectService --> DB
+    AssignmentService --> DB
+    SubmissionService --> DB
+    InstallmentService --> DB
+    AdminService --> DB
+    NotificationService --> DB
+    KPIService --> DB
+    AuditService --> DB
+
+    ProjectService --> AuditService
+    AssignmentService --> AuditService
+    SubmissionService --> AuditService
+    InstallmentService --> AuditService
+    AdminService --> AuditService

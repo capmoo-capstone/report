@@ -1,26 +1,30 @@
 stateDiagram-v2
-    %% Project Status State Machine
-    [*] --> UNASSIGNED: project created
+    %% NexusProcure - Project Status State Machine
+    [*] --> UNASSIGNED: Project Created (Auto Receive No)
 
-    UNASSIGNED --> WAITING_ACCEPT: head assigns staff to project
-    UNASSIGNED --> IN_PROGRESS: staff self-picks job from pool
+    UNASSIGNED --> WAITING_ACCEPT: Head assigns staff to project
+    UNASSIGNED --> REVIEW_TOR: Staff self-picks job (Step 0 TOR Review required)
+    UNASSIGNED --> IN_PROGRESS: Staff claims job (Direct workflow)
 
-    WAITING_ACCEPT --> IN_PROGRESS: staff accepts assignment
+    WAITING_ACCEPT --> REVIEW_TOR: Staff accepts assignment (TOR Review required)
+    WAITING_ACCEPT --> IN_PROGRESS: Staff accepts assignment (Standard workflow)
 
+    REVIEW_TOR --> IN_PROGRESS: TOR Review approved by Head of Unit
 
-    IN_PROGRESS --> UNASSIGNED: staff returns project to pool or general staff completes procurement phase
+    IN_PROGRESS --> UNASSIGNED: Staff returns project to pool / Phase transition
+    IN_PROGRESS --> WAITING_CLOSE: All installment rounds exported by Finance
 
-    IN_PROGRESS --> WAITING_CANCEL: any staff requests cancellation
-    WAITING_CANCEL --> CANCELLED: head approves cancellation
-    WAITING_CANCEL --> IN_PROGRESS: head rejects cancellation
+    WAITING_CLOSE --> CLOSED: Finance staff completes final project closure
+    CLOSED --> IN_PROGRESS: Installment edit requested (REQUEST_EDIT)
 
-    UNASSIGNED --> WAITING_CANCEL: cancellation requested while unassigned
-    WAITING_ACCEPT --> WAITING_CANCEL: cancellation requested while waiting
+    UNASSIGNED --> WAITING_CANCEL: Staff/Head requests cancellation
+    WAITING_ACCEPT --> WAITING_CANCEL: Cancellation requested while waiting
+    REVIEW_TOR --> WAITING_CANCEL: Cancellation requested during TOR review
+    IN_PROGRESS --> WAITING_CANCEL: Cancellation requested during progress
+    WAITING_CLOSE --> WAITING_CANCEL: Cancellation requested before close
 
-    IN_PROGRESS --> CLOSED: finance staff closes project after financial process completes
-
-    CLOSED --> REQUEST_EDIT: finance staff marks project for edit
-    REQUEST_EDIT --> CLOSED: finance staff closes project again
+    WAITING_CANCEL --> CANCELLED: Head of Dept approves cancellation
+    WAITING_CANCEL --> IN_PROGRESS: Head of Dept rejects cancellation
 
     CANCELLED --> [*]
-    CLOSED --> [*]: final closed state
+    CLOSED --> [*]

@@ -1,60 +1,76 @@
 flowchart LR
-    %% Nexus Procure MVP - System Context
+    %% Nexus Procure - System Context Diagram
     classDef actor fill:#ffffff,stroke:#334155,stroke-width:1.5px,color:#0f172a;
     classDef system fill:#e0f2fe,stroke:#0369a1,stroke-width:2px,color:#0f172a;
     classDef external fill:#f8fafc,stroke:#64748b,stroke-width:1.5px,color:#0f172a;
     classDef storage fill:#ecfdf5,stroke:#047857,stroke-width:1.5px,color:#0f172a;
 
-    Admin["Admin"]:::actor
-    UnitRep["Unit Representative"]:::actor
-    Staff["Staff"]:::actor
-    Head["Head of Unit"]:::actor
+    SuperAdmin["Super Admin / Admin"]:::actor
     Director["Head of Department"]:::actor
+    Head["Head of Unit"]:::actor
+    UnitRep["Unit Representative"]:::actor
+    DocStaff["Document Staff"]:::actor
+    Staff["General Staff"]:::actor
+    FinStaff["Finance Staff"]:::actor
     Guest["Guest"]:::actor
     Vendor["Vendor"]:::actor
 
-    subgraph Boundary["Nexus Procure MVP"]
-        subgraph InternalDomain["Internal Web Domain"]
+    subgraph Boundary["NexusProcure System"]
+        subgraph InternalDomain["Internal Web Application"]
             App["Web Application"]:::system
         end
 
-        subgraph VendorDomain["Vendor Domain"]
-            VendorPortal["Vendor Portal"]:::system
+        subgraph VendorDomain["Vendor Portal"]
+            VendorPortal["Vendor Submission Portal"]:::system
         end
 
-        subgraph SharedServices["Shared Backend Services"]
-            API["Backend API"]:::system
-            Auth["Authentication & Authorization"]:::system
-            Assignment["Project Assignment"]:::system
-            Workflow["Project Workflow"]:::system
-            Submission["Submission System"]:::system
-            BackOffice["Back Office Management"]:::system
+        subgraph SharedServices["Backend Services (Node.js/Express)"]
+            API["RESTful API Gateway"]:::system
+            Auth["Auth & Access Policy (RBAC)"]:::system
+            Assignment["Project Assignment & Central Pool"]:::system
+            Workflow["Procurement & Contract Lifecycle"]:::system
+            Submission["Submission & Versioning System"]:::system
+            Notification["Notification & Outbox Engine"]:::system
+            Audit["Audit Logging System"]:::system
+            Finance["Finance Export & Multi-Installment"]:::system
         end
     end
 
+    CUSAML["CU SAML 2.0 IdP"]:::external
+    BrevoEmail["Email Service"]:::external
     DB[("Application Database")]:::storage
     FileStore[("File Storage")]:::storage
 
-    Admin --> App
-    UnitRep --> App
-    Staff --> App
-    Head --> App
+    SuperAdmin --> App
     Director --> App
+    Head --> App
+    UnitRep --> App
+    DocStaff --> App
+    Staff --> App
+    FinStaff --> App
     Guest --> App
     Vendor --> VendorPortal
 
     App --> API
     VendorPortal --> API
+
     API --> Auth
     API --> Assignment
     API --> Workflow
     API --> Submission
-    API --> BackOffice
+    API --> Notification
+    API --> Audit
+    API --> Finance
+
+    Auth --> CUSAML
+    Notification --> BrevoEmail
+    Submission -.->|Presigned URL Direct Upload| FileStore
+    VendorPortal -.->|Direct Upload via Presigned URL| FileStore
 
     Auth --> DB
     Assignment --> DB
     Workflow --> DB
-    BackOffice --> DB
     Submission --> DB
-
-    Submission --> FileStore
+    Notification --> DB
+    Audit --> DB
+    Finance --> DB
